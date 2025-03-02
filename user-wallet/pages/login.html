@@ -124,3 +124,15 @@
                 $(this).find('i').removeClass('bi-eye-slash').addClass('bi-eye');
             }
         });
+$('#loginForm').submit(function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const email = $('#email').val();
+            const password = $('#password').val();
+            
+            // Validate form data
+            if (!email || !password) {
+                showAlert('danger', 'Please enter both email and password.');
+                return;
+            }
