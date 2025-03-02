@@ -136,3 +136,69 @@ $('#loginForm').submit(function(e) {
                 showAlert('danger', 'Please enter both email and password.');
                 return;
             }
+    $('#loginButton').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Signing in...').prop('disabled', true);
+            
+            // For demo, we'll accept specific test credentials or any email with password length >= 6
+            if ((email === 'demo@example.com' && password === 'password') || 
+                (email.includes('@') && password.length >= 6)) {
+                
+                // Store user in localStorage (for demo purposes)
+                const user = {
+                    userId: 12345,
+                    email: email,
+                    firstName: 'John',
+                    lastName: 'Doe',
+                    isLoggedIn: true
+                };
+                localStorage.setItem('walletUser', JSON.stringify(user));
+                
+                // Show success message
+                showAlert('success', 'Login successful. Redirecting to dashboard...');
+                
+                // Redirect to dashboard after a delay
+                setTimeout(function() {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+            } else {
+                // Show error message
+                showAlert('danger', 'Invalid email or password. Please try again.');
+                $('#loginButton').html('Sign In').prop('disabled', false);
+            }
+        });
+        
+        // Social login buttons
+        $('#loginGoogle, #loginFacebook, #loginApple').click(function() {
+            const provider = $(this).attr('id').replace('login', '');
+            showAlert('info', 'Signing in with ' + provider + '...');
+            
+            // Simulate social login
+            $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>').prop('disabled', true);
+            
+            // Create mock user for demo
+            const user = {
+                userId: 12345,
+                email: 'social.user@example.com',
+                firstName: 'John',
+                lastName: 'Doe',
+                isLoggedIn: true,
+                provider: provider
+            };
+            localStorage.setItem('walletUser', JSON.stringify(user));
+            
+            setTimeout(function() {
+                window.location.href = 'dashboard.html';
+            }, 2000);
+        });
+    });
+
+    // Show alert message
+    function showAlert(type, message) {
+        const alertElement = $('#loginAlert');
+        alertElement.removeClass('d-none alert-success alert-danger alert-warning alert-info')
+                    .addClass('alert-' + type)
+                    .html(message)
+                    .show();
+    }
+    </script>
+</body>
+</html>
