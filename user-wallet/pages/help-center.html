@@ -180,4 +180,186 @@
                            placeholder="Search countries...">
                 </div>
             </div>
+            <!-- Country Listings -->
+            <div class="row g-4" id="countryContainer">
+                <!-- North America -->
+                <div class="col-md-4">
+                    <div class="country-section">
+                        <h3 class="region-title">North America</h3>
+                        <ul class="country-list" id="northAmerica">
+                            <li class="country-item"><i class="bi bi-check-circle-fill"></i> United States</li>
+                            <li class="country-item"><i class="bi bi-check-circle-fill"></i> Canada</li>
+                            <li class="country-item"><i class="bi bi-check-circle-fill"></i> Mexico</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Europe -->
+                <div class="col-md-4">
+                    <div class="country-section">
+                        <h3 class="region-title">Europe</h3>
+                        <ul class="country-list" id="europe">
+                            <li class="country-item"><i class="bi bi-check-circle-fill"></i> United Kingdom</li>
+                            <li class="country-item"><i class="bi bi-check-circle-fill"></i> Germany</li>
+                            <li class="country-item"><i class="bi bi-check-circle-fill"></i> France</li>
+                            <li class="country-item"><i class="bi bi-check-circle-fill"></i> Spain</li>
+                            <li class="country-item"><i class="bi bi-check-circle-fill"></i> Italy</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Asia Pacific -->
+                <div class="col-md-4">
+                    <div class="country-section">
+                        <h3 class="region-title">Asia Pacific</h3>
+                        <ul class="country-list" id="asiaPacific">
+                            <li class="country-item"><i class="bi bi-check-circle-fill"></i> Japan</li>
+                            <li class="country-item"><i class="bi bi-check-circle-fill"></i> Singapore</li>
+                            <li class="country-item"><i class="bi bi-check-circle-fill"></i> Australia</li>
+                            <li class="country-item"><i class="bi bi-check-circle-fill"></i> India</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coming Soon Section -->
+            <div class="coming-soon mt-4">
+                <h4>Coming Soon</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="country-list">
+                            <li class="country-item">
+                                <i class="bi bi-clock"></i> Brazil (Q3 2024)
+                            </li>
+                            <li class="country-item">
+                                <i class="bi bi-clock"></i> South Africa (Q4 2024)
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="country-list">
+                            <li class="country-item">
+                                <i class="bi bi-clock"></i> UAE (Q1 2025)
+                            </li>
+                            <li class="country-item">
+                                <i class="bi bi-clock"></i> Saudi Arabia (Q2 2025)
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Support Section -->
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="alert alert-info">
+                        <h5><i class="bi bi-info-circle"></i> Need Help?</h5>
+                        <p>Can't find your country? Contact our support team for more information.</p>
+                        <button class="btn btn-primary" id="contactSupport">
+                            <i class="bi bi-headset"></i> Contact Support
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    // Search functionality
+    $('#searchCountry').on('input', function() {
+        const searchTerm = $(this).val().toLowerCase();
+        $('.country-item').each(function() {
+            const countryName = $(this).text().toLowerCase();
+            $(this).toggle(countryName.includes(searchTerm));
+        });
+    });
+
+    // Refresh button
+    $('#refreshList').click(function() {
+        $(this).html('<i class="bi bi-arrow-repeat"></i> Loading...');
+        setTimeout(() => {
+            location.reload();
+        }, 1000);
+    });
+
+    // Export functionality
+    $('#exportList').click(function() {
+        let exportData = 'Supported Countries List\n\n';
+        $('.region-title').each(function() {
+            exportData += $(this).text() + '\n';
+            $(this).siblings('.country-list').find('.country-item').each(function() {
+                exportData += '- ' + $(this).text().trim() + '\n';
+            });
+            exportData += '\n';
+        });
+
+        const blob = new Blob([exportData], { type: 'text/plain' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'supported-countries.txt';
+        a.click();
+    });
+
+    // Contact Support
+    $('#contactSupport').click(function() {
+        // You can replace this with your actual support modal or redirect
+        window.location.href = 'support-tickets.html';
+    });
+
+    // Sign out functionality
+    $('#signOutButton').click(function(e) {
+        e.preventDefault();
+        if(confirm('Are you sure you want to sign out?')) {
+            // Add your sign out logic here
+            window.location.href = 'login.html';
+        }
+    });
+
+    // Add tooltips to country items
+    $('.country-item').each(function() {
+        $(this).attr('title', 'Click for more information');
+        $(this).css('cursor', 'pointer');
+    });
+
+    // Country item click handler
+    $('.country-item').click(function() {
+        const countryName = $(this).text().trim();
+        showCountryDetails(countryName);
+    });
+
+    function showCountryDetails(countryName) {
+        // You can replace this with a modal or redirect to country-specific page
+        alert(`Showing details for ${countryName}\nThis feature is coming soon!`);
+    }
+
+    // Add animation to new countries
+    $('.coming-soon .country-item').hover(
+        function() {
+            $(this).css('background-color', '#f8f9fa');
+        },
+        function() {
+            $(this).css('background-color', 'transparent');
+        }
+    );
+
+    // Initialize any Bootstrap tooltips
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+});
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supported Countries - Vanilla Digital Wallet</title>
 
