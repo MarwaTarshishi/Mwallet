@@ -498,10 +498,15 @@
             </div>
         </div>
     </div>
+
+    <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
     <script src="../assets/js/main.js"></script>
-     <script>
-         let userData = {
+    
+    <script>
+    // Variables to store user data
+    let userData = {
         user_id: 12345,
         wallet_id: 123456,
         balance: 1250.75,
@@ -619,7 +624,9 @@
             }, 2000);
         });
     });
-function initActivityChart() {
+
+    // Initialize Activity Chart
+    function initActivityChart() {
         const ctx = document.getElementById("activityChart").getContext('2d');
         
         // Simulated chart data
@@ -675,8 +682,10 @@ function initActivityChart() {
             }
         });
     }
-          // Fetch user data
+
+    // Fetch user data
     function fetchUserData() {
+
         updateBalanceDisplay();
     }
 
