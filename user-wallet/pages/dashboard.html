@@ -677,3 +677,139 @@ function initActivityChart() {
     }
           // Fetch user data
     function fetchUserData() {
+        updateBalanceDisplay();
+    }
+
+    // Update balance display
+    function updateBalanceDisplay() {
+        const currencySymbol = userData.currency === 'USD' ? '$' : (userData.currency === 'EUR' ? '€' : '£');
+        $('#currencySymbol').text(currencySymbol);
+        $('#balanceAmount').text(userData.balance.toFixed(2));
+        $('#lastUpdated').text(new Date().toLocaleTimeString());
+    }
+
+    // Simulate deposit API call
+    function simulateDepositAPI(amount, method) {
+        // Show loading state
+        $('#confirmDeposit').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...').prop('disabled', true);
+        
+        // Simulate API delay
+        setTimeout(function() {
+            // Update user data
+            userData.balance += parseFloat(amount);
+            updateBalanceDisplay();
+            
+            // Hide deposit modal
+            $('#depositModal').modal('hide');
+            
+            // Reset form
+            $('#depositForm')[0].reset();
+            $('#depositCardDetails').addClass('d-none');
+            $('#depositBankDetails').addClass('d-none');
+            
+            // Show success modal
+            $('#successMessage').text('Deposit successful!');
+            $('#successDetails').text('$' + parseFloat(amount).toFixed(2) + ' has been added to your wallet.');
+            $('#successModal').modal('show');
+            
+            // Reset button state
+            $('#confirmDeposit').html('Confirm Deposit').prop('disabled', false);
+        }, 2000);
+    }
+
+    // Simulate withdraw API call
+    function simulateWithdrawAPI(amount, method) {
+        // Show loading state
+        $('#confirmWithdraw').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...').prop('disabled', true);
+        
+        // Simulate API delay
+        setTimeout(function() {
+            // Update user data
+            userData.balance -= parseFloat(amount);
+            updateBalanceDisplay();
+            
+            // Hide withdraw modal
+            $('#withdrawModal').modal('hide');
+            
+            // Reset form
+            $('#withdrawForm')[0].reset();
+            
+            // Show success modal
+            $('#successMessage').text('Withdrawal successful!');
+            $('#successDetails').text('$' + parseFloat(amount).toFixed(2) + ' has been withdrawn from your wallet.');
+            $('#successModal').modal('show');
+            
+            // Reset button state
+            $('#confirmWithdraw').html('Confirm Withdrawal').prop('disabled', false);
+        }, 2000);
+    }
+
+    // Simulate transfer API call
+    function simulateTransferAPI(email, amount) {
+        // Show loading state
+        $('#confirmTransfer').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...').prop('disabled', true);
+        
+        // Simulate API delay
+        setTimeout(function() {
+            // Update user data
+            userData.balance -= parseFloat(amount);
+            updateBalanceDisplay();
+            
+            // Hide transfer modal
+            $('#transferModal').modal('hide');
+            
+            // Reset form
+            $('#transferForm')[0].reset();
+            
+            // Show success modal
+            $('#successMessage').text('Transfer successful!');
+            $('#successDetails').text('$' + parseFloat(amount).toFixed(2) + ' has been sent to ' + email);
+            $('#successModal').modal('show');
+            
+            // Reset button state
+            $('#confirmTransfer').html('Confirm Transfer').prop('disabled', false);
+        }, 2000);
+    }
+
+    // Simulate QR scan
+    function simulateQrScan() {
+        $('#qrScanner').html('<div class="d-flex flex-column justify-content-center align-items-center h-100"><i class="bi bi-check-circle-fill text-success mb-3" style="font-size: 3rem;"></i><p>QR Code Scanned Successfully</p></div>');
+        
+        // Simulate processing
+        setTimeout(function() {
+            // Show payment confirmation
+            $('#qrScanner').html('<div class="d-flex flex-column justify-content-center align-items-center h-100"><h5>Payment Request</h5><p>Amount: $25.00</p><p>To: Coffee Shop</p><p>Description: Coffee purchase</p><button class="btn btn-success mt-3" id="confirmQrPayment">Confirm Payment</button></div>');
+            
+            // Set up confirm payment button
+            $('#confirmQrPayment').click(function() {
+                // Show loading
+                $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...').prop('disabled', true);
+                
+                // Simulate processing
+                setTimeout(function() {
+                    // Update user data
+                    userData.balance -= 25.00;
+                    updateBalanceDisplay();
+                    
+                    // Hide QR payment modal
+                    $('#qrPaymentModal').modal('hide');
+                    
+                    // Reset scanner
+                    $('#qrScanner').html('<div class="d-flex justify-content-center align-items-center h-100"><button class="btn btn-primary" id="startScanner">Start Scanner</button></div>');
+                    
+                    // Show success modal
+                    $('#successMessage').text('QR Payment successful!');
+                    $('#successDetails').text('$25.00 has been paid to Coffee Shop');
+                    $('#successModal').modal('show');
+                    
+                    // Reset start scanner button
+                    $('#startScanner').click(function() {
+                        simulateQrScan();
+                    });
+                }, 1500);
+            });
+        }, 1500);
+    }
+    </script>
+</body>
+</html>
