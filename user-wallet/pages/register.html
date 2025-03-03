@@ -15,3 +15,298 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
+ <!-- Public Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">
+                <i class="bi bi-wallet2"></i> Vanilla Wallet
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="features.html">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pricing.html">Pricing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contact</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <a href="login.html" class="btn btn-outline-light me-2">Sign In</a>
+                    <a href="register.html" class="btn btn-light">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row justify-content-center mt-5 mb-5">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="row g-0">
+                        <div class="col-md-5 d-none d-md-block auth-sidebar">
+                            <div class="p-4 p-md-5 h-100 d-flex flex-column bg-primary text-white">
+                                </form>
+                                
+                                <div class="text-center mt-4">
+                                    <p>Or sign up with</p>
+                                    <div class="d-flex justify-content-center gap-2 mb-3">
+                                        <button class="btn btn-outline-primary" id="registerGoogle">
+                                            <i class="bi bi-google"></i> Google
+                                        </button>
+                                        <button class="btn btn-outline-primary" id="registerFacebook">
+                                            <i class="bi bi-facebook"></i> Facebook
+                                        </button>
+                                        <button class="btn btn-outline-primary" id="registerApple">
+                                            <i class="bi bi-apple"></i> Apple
+                                        </button>
+                                    </div>
+                                    <p>Already have an account? <a href="login.html">Sign in</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../assets/js/main.js"></script>
+
+    <script>
+    $(document).ready(function() {
+        // Password strength meter
+        $('#password').on('input', function() {
+            const password = $(this).val();
+            let strength = 0;
+            
+            // Length check
+            if (password.length >= 8) strength += 1;
+            if (password.length >= 12) strength += 1;
+            
+            // Complexity checks
+            if (/[A-Z]/.test(password)) strength += 1;
+            if (/[a-z]/.test(password)) strength += 1;
+            if (/[0-9]/.test(password)) strength += 1;
+            if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+            
+            // Cap at 4
+            strength = Math.min(strength, 4);
+            
+            // Update progress bar
+            const strengthClasses = ['bg-danger', 'bg-warning', 'bg-info', 'bg-primary', 'bg-success'];
+            const strengthLabels = ['Very Weak', 'Weak', 'Medium', 'Strong', 'Very Strong'];
+            
+            $('#passwordStrength')
+                .removeClass('bg-danger bg-warning bg-info bg-primary bg-success')
+                .addClass(strengthClasses[strength])
+                .css('width', ((strength + 1) * 20) + '%')
+                .text(strengthLabels[strength])
+                .attr('aria-valuenow', (strength + 1) * 20);
+        });
+        
+        // Registration form submission
+        $('#registerForm').submit(function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const firstName = $('#firstName').val();
+            const lastName = $('#lastName').val();
+            const email = $('#email').val();
+            const phone = $('#phone').val();
+            const password = $('#password').val();
+            const confirmPassword = $('#confirmPassword').val();
+            const termsCheck = $('#termsCheck').prop('checked');
+            
+            // Validate form data
+            if (!firstName || !lastName || !email || !password || !confirmPassword) {
+                showAlert('danger', 'Please fill in all required fields.');
+                return;
+            }
+            
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showAlert('danger', 'Please enter a valid email address.');
+                return;
+            }
+            
+            // Validate password strength
+            if (password.length < 8) {
+                showAlert('danger', 'Password must be at least 8 characters long.');
+                return;
+            }
+            
+            // Check if passwords match
+            if (password !== confirmPassword) {
+                showAlert('danger', 'Passwords do not match.');
+                return;
+            }
+            
+            // Validate terms acceptance
+            if (!termsCheck) {
+                showAlert('danger', 'You must accept the Terms of Service and Privacy Policy.');
+                return;
+            }
+            
+            // Show loading state
+            $('#registerButton').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Creating account...').prop('disabled', true);
+            
+            // Store user in localStorage (for demo purposes)
+            const user = {
+                userId: Math.floor(Math.random() * 100000) + 1,
+                email: email,
+                firstName: firstName,
+                lastName: lastName,
+                phone: phone,
+                isLoggedIn: true,
+                walletId: 'WALL-' + Math.floor(Math.random() * 1000000),
+                balance: 0.00,
+                currency: 'USD',
+                createdAt: new Date().toISOString()
+            };
+            localStorage.setItem('walletUser', JSON.stringify(user));
+            
+            // Show success message
+            showAlert('success', 'Registration successful! Please check your email for verification instructions.');
+            
+            // Redirect to verification page after a delay
+            setTimeout(function() {
+                window.location.href = 'verify.html';
+            }, 2000);
+        });
+        
+        // Social registration buttons
+        $('#registerGoogle, #registerFacebook, #registerApple').click(function() {
+            const provider = $(this).attr('id').replace('register', '');
+            showAlert('info', 'Signing up with ' + provider + '...');
+            
+            // Simulate social registration
+            $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>').prop('disabled', true);
+            
+            // Store user in localStorage
+            const user = {
+                userId: Math.floor(Math.random() * 100000) + 1,
+                email: 'social.user@example.com',
+                firstName: 'John',
+                lastName: 'Doe',
+                isLoggedIn: true,
+                provider: provider,
+                walletId: 'WALL-' + Math.floor(Math.random() * 1000000),
+                balance: 0.00,
+                currency: 'USD',
+                createdAt: new Date().toISOString()
+            };
+            localStorage.setItem('walletUser', JSON.stringify(user));
+            
+            setTimeout(function() {
+                window.location.href = 'verify.html';
+            }, 2000);
+        });
+    });
+
+    // Show alert message
+    function showAlert(type, message) {
+        const alertElement = $('#registerAlert');
+        alertElement.removeClass('d-none alert-success alert-danger alert-warning alert-info')
+                    .addClass('alert-' + type)
+                    .html(message)
+                    .show();
+    }
+    </script>
+</body>
+</html>
+                                <h2>Create Account</h2>
+                                <p>Join thousands of users who trust Vanilla Wallet for secure and easy digital transactions.</p>
+                                
+                                <div class="features mt-auto">
+                                    <div class="mb-3 form-check">
+                                        <input type="checkbox" class="form-check-input" id="termsCheck" required>
+                                        <label class="form-check-label" for="termsCheck">
+                                            I agree to the <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a>
+                                        </label>
+                                    </div>
+                                    <div class="d-grid gap-2">
+                                        <button type="submit" class="btn btn-primary" id="registerButton">Create Account</button>
+                                    </div>
+                                <div class="feature-item d-flex align-items-center mb-3">
+                                        <div class="feature-icon bg-white text-primary rounded-circle p-2 me-3">
+                                            <i class="bi bi-shield-check"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-0">Secure Transactions</h6>
+                                            <small class="text-white-50">Your money is safe with us</small>
+                                        </div>
+                                    </div>
+                                    <div class="feature-item d-flex align-items-center mb-3">
+                                        <div class="feature-icon bg-white text-primary rounded-circle p-2 me-3">
+                                            <i class="bi bi-lightning-charge"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-0">Instant Transfers</h6>
+                                            <small class="text-white-50">Send money in seconds</small>
+                                        </div>
+                                    </div>
+                                    <div class="feature-item d-flex align-items-center">
+                                        <div class="feature-icon bg-white text-primary rounded-circle p-2 me-3">
+                                            <i class="bi bi-graph-up"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-0">Financial Tracking</h6>
+                                            <small class="text-white-50">Monitor your spending</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="card-body p-4 p-md-5">
+                                <h2 class="card-title text-center mb-4">Create Account</h2>
+                                
+                                <div id="registerAlert" class="alert d-none" role="alert"></div>
+                                
+                                <form id="registerForm">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="firstName" class="form-label">First Name</label>
+                                            <input type="text" class="form-control" id="firstName" placeholder="Enter your first name" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="lastName" class="form-label">Last Name</label>
+                                            <input type="text" class="form-control" id="lastName" placeholder="Enter your last name" required>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="phone" class="form-label">Phone Number (Optional)</label>
+                                        <input type="tel" class="form-control" id="phone" placeholder="Enter your phone number">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label">Password</label>
+                                        <input type="password" class="form-control" id="password" placeholder="Create a password" required>
+                                        <div class="progress mt-2" style="height: 5px;">
+                                            <div id="passwordStrength" class="progress-bar bg-danger" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Weak</div>
+                                        </div>
+                                        <small class="form-text text-muted">Use at least 8 characters with letters, numbers and symbols</small>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="confirmPassword" class="form-label">Confirm Password</label>
+                                        <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password" required>
+                                    </div>
