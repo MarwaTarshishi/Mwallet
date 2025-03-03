@@ -619,4 +619,59 @@
             }, 2000);
         });
     });
-
+function initActivityChart() {
+        const ctx = document.getElementById("activityChart").getContext('2d');
+        
+        // Simulated chart data
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+        const depositData = [350, 450, 550, 500, 800, 1200];
+        const withdrawalData = [200, 350, 400, 450, 500, 600];
+        const balanceData = [150, 250, 400, 450, 750, 1350];
+        
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: months,
+                datasets: [
+                    {
+                        label: "Deposits",
+                        data: depositData,
+                        backgroundColor: "rgba(40, 167, 69, 0.2)",
+                        borderColor: "rgba(40, 167, 69, 1)",
+                        borderWidth: 2,
+                        tension: 0.4
+                    },
+                    {
+                        label: "Withdrawals",
+                        data: withdrawalData,
+                        backgroundColor: "rgba(220, 53, 69, 0.2)",
+                        borderColor: "rgba(220, 53, 69, 1)",
+                        borderWidth: 2,
+                        tension: 0.4
+                    },
+                    {
+                        label: "Balance",
+                        data: balanceData,
+                        backgroundColor: "rgba(0, 123, 255, 0.2)",
+                        borderColor: "rgba(0, 123, 255, 1)",
+                        borderWidth: 2,
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
