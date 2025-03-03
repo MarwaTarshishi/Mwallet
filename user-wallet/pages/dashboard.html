@@ -501,3 +501,122 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/js/main.js"></script>
      <script>
+         let userData = {
+        user_id: 12345,
+        wallet_id: 123456,
+        balance: 1250.75,
+        currency: 'USD'
+    };
+
+    // Initialize dashboard
+    $(document).ready(function() {
+        // Set up the activity chart
+        initActivityChart();
+        
+        // Set up event listeners
+        $('#refreshBalance').click(fetchUserData);
+        
+        // Deposit form events
+        $('#depositMethod').change(function() {
+            const method = $(this).val();
+            if(method === 'credit_card' || method === 'debit_card') {
+                $('#depositCardDetails').removeClass('d-none');
+                $('#depositBankDetails').addClass('d-none');
+            } else if(method === 'bank_transfer') {
+                $('#depositCardDetails').addClass('d-none');
+                $('#depositBankDetails').removeClass('d-none');
+            } else {
+                $('#depositCardDetails').addClass('d-none');
+                $('#depositBankDetails').addClass('d-none');
+            }
+        });
+        
+        // Confirm deposit button
+        $('#confirmDeposit').click(function() {
+            const amount = $('#depositAmount').val();
+            if(!amount || amount < 10) {
+                alert('Please enter a valid amount (minimum $10.00)');
+                return;
+            }
+            
+            const method = $('#depositMethod').val();
+            if(!method) {
+                alert('Please select a payment method');
+                return;
+            }
+            
+            // Simulate deposit API call
+            simulateDepositAPI(amount, method);
+        });
+        
+        // Confirm withdraw button
+        $('#confirmWithdraw').click(function() {
+            const amount = $('#withdrawAmount').val();
+            if(!amount || amount < 10) {
+                alert('Please enter a valid amount (minimum $10.00)');
+                return;
+            }
+            
+            const method = $('#withdrawMethod').val();
+            if(!method) {
+                alert('Please select a withdrawal method');
+                return;
+            }
+            
+            if(parseFloat(amount) > userData.balance) {
+                alert('Insufficient balance for this withdrawal');
+                return;
+            }
+            
+            // Simulate withdraw API call
+            simulateWithdrawAPI(amount, method);
+        });
+        
+        // Confirm transfer button
+        $('#confirmTransfer').click(function() {
+            const email = $('#receiverEmail').val();
+            if(!email) {
+                alert('Please enter the recipient\'s email');
+                return;
+            }
+            
+            const amount = $('#transferAmount').val();
+            if(!amount || amount < 1) {
+                alert('Please enter a valid amount (minimum $1.00)');
+                return;
+            }
+            
+            if(parseFloat(amount) > userData.balance) {
+                alert('Insufficient balance for this transfer');
+                return;
+            }
+            
+            // Simulate transfer API call
+            simulateTransferAPI(email, amount);
+        });
+        
+        // Generate QR code button
+        $('#generateQrCode').click(function() {
+            const amount = $('#qrAmount').val();
+            if(!amount || amount < 1) {
+                alert('Please enter a valid amount (minimum $1.00)');
+                return;
+            }
+            
+            $('#qrCodeDisplay').removeClass('d-none');
+            $('#qrDisplayAmount').text('$' + parseFloat(amount).toFixed(2));
+        });
+        
+        // Start QR scanner button
+        $('#startScanner').click(function() {
+            // This would normally initialize a QR scanner
+            // For demo purposes, we'll just show a placeholder message
+            $('#qrScanner').html('<div class="d-flex flex-column justify-content-center align-items-center h-100"><div class="spinner-border text-primary mb-3" role="status"><span class="visually-hidden">Loading...</span></div><p>Camera access required</p></div>');
+            
+            setTimeout(function() {
+                // Simulate a successful scan after 2 seconds
+                simulateQrScan();
+            }, 2000);
+        });
+    });
+
