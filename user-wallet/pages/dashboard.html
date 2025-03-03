@@ -376,6 +376,101 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="transferModal" tabindex="-1" aria-labelledby="transferModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="transferModalLabel">Transfer Funds</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="transferForm">
+                        <div class="mb-3">
+                            <label for="receiverEmail" class="form-label">Recipient's Email</label>
+                            <input type="email" class="form-control" id="receiverEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="transferAmount" class="form-label">Amount</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="number" class="form-control" id="transferAmount" min="1" step="0.01" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="transferDescription" class="form-label">Description (Optional)</label>
+                            <textarea class="form-control" id="transferDescription" rows="2"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="confirmTransfer">Confirm Transfer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QR Payment Modal -->
+    <div class="modal fade" id="qrPaymentModal" tabindex="-1" aria-labelledby="qrPaymentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="qrPaymentModalLabel">QR Payment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs" id="qrPaymentTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="scan-tab" data-bs-toggle="tab" data-bs-target="#scan" type="button" role="tab" aria-controls="scan" aria-selected="true">Scan QR</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="generate-tab" data-bs-toggle="tab" data-bs-target="#generate" type="button" role="tab" aria-controls="generate" aria-selected="false">Generate QR</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content p-3" id="qrPaymentTabsContent">
+                        <div class="tab-pane fade show active" id="scan" role="tabpanel" aria-labelledby="scan-tab">
+                            <div class="text-center mb-3">
+                                <div id="qrScanner" class="border p-3 mb-3 mx-auto" style="width: 300px; height: 300px;">
+                                    <div class="d-flex justify-content-center align-items-center h-100">
+                                        <button class="btn btn-primary" id="startScanner">Start Scanner</button>
+                                    </div>
+                                </div>
+                                <p class="text-muted">Scan a QR code to make a payment</p>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="generate" role="tabpanel" aria-labelledby="generate-tab">
+                            <form id="generateQrForm">
+                                <div class="mb-3">
+                                    <label for="qrAmount" class="form-label">Amount</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" class="form-control" id="qrAmount" min="1" step="0.01" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="qrDescription" class="form-label">Description (Optional)</label>
+                                    <textarea class="form-control" id="qrDescription" rows="2"></textarea>
+                                </div>
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-primary" id="generateQrCode">Generate QR Code</button>
+                                </div>
+                            </form>
+                            <div id="qrCodeDisplay" class="text-center mt-3 d-none">
+                                <div id="qrCode" class="mx-auto mb-3">
+                                    <!-- QR Code will be placed here -->
+                                    <img src="../assets/images/sample-qr.png" alt="Sample QR Code" class="img-fluid" style="max-width: 200px;">
+                                </div>
+                                <p>Scan this code to pay <span id="qrDisplayAmount">$0.00</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     
 
