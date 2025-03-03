@@ -120,3 +120,64 @@
 </header>
 <div class="container-fluid">
     <div class="row">
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <div class="position-sticky pt-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">
+                            <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="javascript:void(0)">
+                            <i class="bi bi-globe me-2"></i> Countries
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="transactions.html">
+                            <i class="bi bi-list-ul me-2"></i> Transactions
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="send-money.html">
+                            <i class="bi bi-send me-2"></i> Send Money
+                        </a>
+                    </li>
+                </ul>
+
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                    <span>Support</span>
+                </h6>
+                <ul class="nav flex-column mb-2">
+                    <li class="nav-item">
+                        <a class="nav-link" href="help-center.html">
+                            <i class="bi bi-question-circle me-2"></i> Help Center
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="support-tickets.html">
+                            <i class="bi bi-ticket me-2"></i> Support Tickets
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Supported Countries</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group me-2">
+                        <button type="button" class="btn btn-sm btn-outline-secondary" id="refreshList">
+                            <i class="bi bi-arrow-repeat"></i> Refresh
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" id="exportList">
+                            <i class="bi bi-download"></i> Export
+                        </button>
+                    </div>
+                    <input type="text" class="form-control form-control-sm" id="searchCountry" 
+                           placeholder="Search countries...">
+                </div>
+            </div>
+
