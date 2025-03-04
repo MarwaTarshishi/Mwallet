@@ -24,3 +24,21 @@
         // Update user full name in the header
         document.getElementById("userFullName").textContent = firstName + " " + lastName;
     }
+    function getNotificationCount() {
+        // Simulate random notification count between 0 and 5
+        const count = Math.floor(Math.random() * 6);
+
+        // Update notification badge
+        const notificationBadge = document.getElementById("notificationCount");
+        notificationBadge.textContent = count;
+
+        // Hide badge if count is 0
+        if (count === 0) {
+            notificationBadge.style.display = "none";
+        } else {
+            notificationBadge.style.display = "inline-block";
+        }
+    }
+</script>
+</body>
+</html>
