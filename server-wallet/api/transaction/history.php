@@ -10,3 +10,6 @@ include_once '../../models/Wallet.php';
 include_once '../../utils/jwt_auth.php';
 $database = new Database();
 $db = $database->getConnection();
+$transaction = new Transaction($db);
+$wallet = new Wallet($db);
+$jwt = new JwtAuth();
