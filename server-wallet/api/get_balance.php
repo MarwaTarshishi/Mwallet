@@ -12,3 +12,4 @@ $database = new Database();
 $db = $database->getConnection();
 $wallet = new Wallet($db);
 $jwt = new JwtAuth();
+$data = json_decode(file_get_contents("php://input"));
