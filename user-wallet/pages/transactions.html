@@ -574,3 +574,88 @@
                 location.reload();
             }, 1500);
         });
+          // Handle filter form submission
+        $('#filterForm').submit(function(e) {
+            e.preventDefault();
+            
+            const filterType = $('#filterType').val();
+            const filterStatus = $('#filterStatus').val();
+            const filterSearch = $('#filterSearch').val();
+            
+            // In a real app, we would filter transactions by these criteria
+            // For demo purposes, we'll just show a loading indicator and then restore the original table
+            
+            $('#transactionsTable').html('<tr><td colspan="7" class="text-center"><div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div> Loading transactions...</td></tr>');
+            
+            setTimeout(function() {
+                // Simulate reloading the original table
+                location.reload();
+            }, 1500);
+        });
+        
+        // Handle refresh button
+        $('#refreshTransactions').click(function() {
+            // Show loading state
+            $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>').prop('disabled', true);
+            
+            // Simulate refreshing the transactions
+            setTimeout(function() {
+                // Reset button and reload page
+                $('#refreshTransactions').html('<i class="bi bi-arrow-repeat"></i> Refresh').prop('disabled', false);
+                location.reload();
+            }, 1500);
+        });
+        
+        // Handle export button
+        $('#exportTransactions').click(function() {
+            // Show loading state
+            $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>').prop('disabled', true);
+            
+            // Simulate export process
+            setTimeout(function() {
+                // Reset button
+                $('#exportTransactions').html('<i class="bi bi-download"></i> Export').prop('disabled', false);
+                
+                // For demo purposes, we'll just show an alert
+                alert('Transactions exported to CSV successfully!');
+            }, 1500);
+        });
+        
+        // Handle download receipt button
+        $('#downloadReceipt').click(function() {
+            // Show loading state
+            $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>').prop('disabled', true);
+            
+            // Simulate download process
+            setTimeout(function() {
+                // Reset button
+                $('#downloadReceipt').html('Download Receipt').prop('disabled', false);
+                
+                // For demo purposes, we'll just show an alert
+                alert('Receipt downloaded successfully!');
+            }, 1500);
+        });
+        
+        // Handle pagination links
+        $('.page-link').click(function(e) {
+            e.preventDefault();
+            
+            // Don't do anything if the link is disabled
+            if ($(this).parent().hasClass('disabled') || $(this).parent().hasClass('active')) {
+                return;
+            }
+            
+            // In a real app, we would load the selected page
+            // For demo purposes, we'll just show a loading indicator and then restore the original table
+            
+            $('#transactionsTable').html('<tr><td colspan="7" class="text-center"><div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div> Loading transactions...</td></tr>');
+            
+            setTimeout(function() {
+                // Simulate reloading the original table
+                location.reload();
+            }, 1500);
+        });
+    });
+    </script>
+</body>
+</html>
