@@ -1,7 +1,3 @@
--- Drop database if it exists (CAUTION: This will delete all existing data)
--- DROP DATABASE IF EXISTS vanilla_wallet;
-
--- Create database if it doesn't exist
 CREATE DATABASE IF NOT EXISTS vanilla_wallet;
 USE vanilla_wallet;
 
