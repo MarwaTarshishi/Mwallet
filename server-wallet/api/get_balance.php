@@ -5,14 +5,24 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+
+// Include database and object files
 include_once '../../config/database.php';
 include_once '../../models/Wallet.php';
 include_once '../../utils/jwt_auth.php';
+
+// Get database connection
 $database = new Database();
 $db = $database->getConnection();
+
+// Prepare objects
 $wallet = new Wallet($db);
 $jwt = new JwtAuth();
+
+// Get posted data
 $data = json_decode(file_get_contents("php://input"));
+
+// Get JWT token from the header
 $headers = getallheaders();
 $token = null;
 
@@ -50,6 +60,7 @@ if (!empty($data->wallet_id)) {
         ));
         exit;
     }
+    
     // Get wallet balance
     $balance = $wallet->getBalance($data->wallet_id);
     
