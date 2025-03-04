@@ -43,3 +43,4 @@
     margin-right: 0.5rem;
     vertical-align: middle;
 }
+Transaction type badges
