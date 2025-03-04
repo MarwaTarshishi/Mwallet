@@ -8,3 +8,5 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 include_once '../../config/database.php';
 include_once '../../models/Wallet.php';
 include_once '../../utils/jwt_auth.php';
+$database = new Database();
+$db = $database->getConnection();
