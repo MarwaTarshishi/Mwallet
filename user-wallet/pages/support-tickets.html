@@ -12,3 +12,192 @@
     <link href="../assets/css/style.css" rel="stylesheet">
     <link href="../assets/css/tickets.css" rel="stylesheet">
 
+    <!-- Custom CSS -->
+    <style>
+       
+        .dropzone {
+            border: 2px dashed #0087F7;
+            border-radius: 5px;
+            background: white;
+            min-height: 150px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .ticket-timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .ticket-timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #dee2e6;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #0d6efd;
+        }
+
+        .ticket-stats {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .knowledge-base {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .kb-article {
+            padding: 15px;
+            border-bottom: 1px solid #dee2e6;
+            transition: background-color 0.3s ease;
+        }
+
+        .kb-article:hover {
+            background-color: white;
+        }
+
+        .attachment-preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .attachment-preview {
+            position: relative;
+            width: 100px;
+            height: 100px;
+        }
+
+        .attachment-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .attachment-preview .remove-attachment {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: red;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+
+        .custom-toast {
+            min-width: 300px;
+            max-width: 500px;
+        }
+    </style>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Dropzone -->
+    <script src="https://cdn.jsdelivr.net/npm/dropzone@5.9.3/dist/min/dropzone.min.js"></script>
+</head>
+<body>
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="position-fixed top-0 start-0 w-100 h-100 d-none">
+        <div class="w-100 h-100 bg-white opacity-75 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <!-- Your existing navbar code -->
+
+    <div class="container-fluid">
+        <div class="row">
+           
+
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <!-- Quick Stats -->
+                <div class="row ticket-stats">
+                    <div class="col-md-3">
+                        <div class="stat-item bg-primary text-white">
+                            <i class="bi bi-ticket-detailed"></i>
+                            <div class="stat-number" id="totalTickets">0</div>
+                            <div>Total Tickets</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-item bg-success text-white">
+                            <i class="bi bi-check-circle"></i>
+                            <div class="stat-number" id="resolvedTickets">0</div>
+                            <div>Resolved</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-item bg-warning text-dark">
+                            <i class="bi bi-clock"></i>
+                            <div class="stat-number" id="pendingTickets">0</div>
+                            <div>Pending</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-item bg-info text-white">
+                            <i class="bi bi-arrow-clockwise"></i>
+                            <div class="stat-number" id="avgResponseTime">0h</div>
+                            <div>Avg Response Time</div>
+                        </div>
+                    </div>
+                </div>
+
