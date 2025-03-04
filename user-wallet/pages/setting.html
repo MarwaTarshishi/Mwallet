@@ -1,1 +1,588 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Vanilla Digital Wallet</title>
+    
+    <!-- CSS Links -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="../assets/css/style.css" rel="stylesheet">
+    <link href="../assets/css/settings.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <style>
+        .settings-card {
+            transition: transform 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+
+        .settings-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .nav-pills .nav-link {
+            color: #495057;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-pills .nav-link.active {
+            background-color: #0d6efd;
+            color: white;
+        }
+
+        .nav-pills .nav-link i {
+            margin-right: 10px;
+        }
+
+        .form-label {
+            font-weight: 500;
+        }
+
+        .settings-header {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .password-strength {
+            height: 5px;
+            margin-top: 0.5rem;
+        }
+
+        .session-card {
+            border-left: 4px solid transparent;
+        }
+
+        .session-card.current {
+            border-left-color: #0d6efd;
+        }
+
+        .device-icon {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+
+        .notification-group {
+            padding: 1rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .notification-group:last-child {
+            border-bottom: none;
+        }
+
+        .payment-method-card {
+            border: 1px solid #dee2e6;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .payment-method-card.default {
+            border-color: #0d6efd;
+            background-color: #f8f9fa;
+        }
+    </style>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="position-fixed top-0 start-0 w-100 h-100 d-none">
+        <div class="w-100 h-100 bg-white opacity-75 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+<!-- Navbar -->
+<header class="navbar navbar-dark sticky-top bg-primary flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="./dashboard.html">
+        <i class="bi bi-wallet2"></i> Vanilla Wallet
+    </a>
+    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" 
+            data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="w-100"></div>
+    
+    <div class="navbar-nav">
+        <div class="nav-item text-nowrap d-flex align-items-center">
+            <a class="nav-link px-3 position-relative" href="./notifications.html">
+                <i class="bi bi-bell"></i>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" 
+                      id="notificationCount">0</span>
+            </a>
+            
+            <div class="dropdown">
+                <a class="nav-link px-3 dropdown-toggle" href="#" id="userDropdown" 
+                   role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span id="userFullName">Loading...</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                    <li><a class="dropdown-item" href="./profile.html">
+                        <i class="bi bi-person"></i> Profile</a></li>
+                    <li><a class="dropdown-item" href="./settings.html">
+                        <i class="bi bi-gear"></i> Settings</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#" id="signOutButton">
+                        <i class="bi bi-box-arrow-right"></i> Sign out</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <!-- Your existing sidebar content -->
+                </div>
+            </nav>
+    
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <!-- Settings Header -->
+                <div class="settings-header d-flex justify-content-between align-items-center">
+                    <h1 class="h2">Account Settings</h1>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-outline-secondary" id="refreshSettings">
+                            <i class="bi bi-arrow-clockwise"></i> Refresh
+                        </button>
+                        <button type="button" class="btn btn-outline-primary" id="saveAllSettings">
+                            <i class="bi bi-save"></i> Save All Changes
+                        </button>
+                    </div>
+                </div>
+    
+                <!-- Settings Navigation -->
+                <div class="row mt-4">
+                    <div class="col-md-3">
+                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist">
+                            <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#account-settings">
+                                <i class="bi bi-person"></i> Account
+                            </button>
+                            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#security-settings">
+                                <i class="bi bi-shield-lock"></i> Security
+                            </button>
+                            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#payment-settings">
+                                <i class="bi bi-credit-card"></i> Payment Methods
+                            </button>
+                            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#notification-settings">
+                                <i class="bi bi-bell"></i> Notifications
+                            </button>
+                            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#privacy-settings">
+                                <i class="bi bi-eye-slash"></i> Privacy
+                            </button>
+                            <button class="nav-link text-danger" data-bs-toggle="pill" data-bs-target="#danger-zone">
+                                <i class="bi bi-exclamation-triangle"></i> Danger Zone
+                            </button>
+                        </div>
+                    </div>
+    
+                    <div class="col-md-9">
+                        <div class="tab-content">
+                            <!-- Account Settings -->
+                            <div class="tab-pane fade show active" id="account-settings">
+                                <div class="card settings-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Personal Information</h5>
+                                        <form id="personalInfoForm">
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="firstName" class="form-label">First Name</label>
+                                                    <input type="text" class="form-control" id="firstName" name="firstName" required placeholder="Enter your first name">
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="lastName" class="form-label">Last Name</label>
+                                                    <input type="text" class="form-control" id="lastName" name="lastName" required placeholder="Enter your last name">
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="email" class="form-label">Email Address</label>
+                                                <input type="email" class="form-control" id="email" name="email" required placeholder="Enter your email">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="phone" class="form-label">Phone Number</label>
+                                                <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter your phone number">
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">
+                                                Save Changes
+                                            </button>
+                                            </form>
+                                            </div>
+                                            </div>
+                                            
+                                            <div class="card settings-card">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Preferences</h5>
+                                                    <form id="preferencesForm">
+                                                        <div class="mb-3">
+                                                            <label for="language" class="form-label">Language</label>
+                                                            <select class="form-select" id="language" name="language">
+                                                                <option value="en">English</option>
+                                                                <option value="es">Spanish</option>
+                                                                <option value="fr">French</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="timezone" class="form-label">Time Zone</label>
+                                                            <select class="form-select" id="timezone" name="timezone">
+                                                                <!-- Will be populated by JavaScript -->
+                                                            </select>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="currency" class="form-label">Currency</label>
+                                                            <select class="form-select" id="currency" name="currency">
+                                                                <option value="USD">USD - US Dollar</option>
+                                                                <option value="EUR">EUR - Euro</option>
+                                                                <option value="GBP">GBP - British Pound</option>
+                                                            </select>
+                                                        </div>
+                                                        <button type="submit" class="btn btn-primary">
+                                                            Save Preferences
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Security Settings -->
+                                            <div class="tab-pane fade" id="security-settings">
+                                                <div class="card settings-card">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">Change Password</h5>
+                                                        <form id="passwordForm">
+                                                            <div class="mb-3">
+                                                                <label for="currentPassword" class="form-label">Current Password</label>
+                                                                <input type="password" class="form-control" id="currentPassword" name="currentPassword" required>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="newPassword" class="form-label">New Password</label>
+                                                                <input type="password" class="form-control" id="newPassword" name="newPassword" required>
+                                                                <div class="password-strength progress">
+                                                                    <div class="progress-bar" role="progressbar"></div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                                                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                                                            </div>
+                                                            <button type="submit" class="btn btn-primary">
+                                                                Update Password
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            
+                                                <div class="card settings-card">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">Two-Factor Authentication</h5>
+                                                        <div class="mb-3">
+                                                            <div class="form-check form-switch">
+                                                                <input class="form-check-input" type="checkbox" id="enable2FA" name="enable2FA">
+                                                                <label class="form-check-label" for="enable2FA">Enable Two-Factor Authentication</label>
+                                                            </div>
+                                                        </div>
+                                                        <div id="twoFASetup" class="d-none">
+                                                            <!-- 2FA setup content -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            
+                                                <div class="card settings-card">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">Active Sessions</h5>
+                                                        <div id="activeSessions">
+                                                            <!-- Will be populated by JavaScript -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Payment Settings -->
+                                            <div class="tab-pane fade" id="payment-settings">
+                                                <div class="card settings-card">
+                                                    <div class="card-body">
+                                                        <div class="d-flex justify-content-between align-items-center mb-4">
+                                                            <h5 class="card-title mb-0">Payment Methods</h5>
+                                                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPaymentMethodModal">
+                                                                <i class="bi bi-plus"></i> Add Payment Method
+                                                            </button>
+                                                        </div>
+                                                        <div id="paymentMethods">
+                                                            <!-- Will be populated by JavaScript -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Notification Settings -->
+                                            <div class="tab-pane fade" id="notification-settings">
+                                                <div class="card settings-card">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">Notification Preferences</h5>
+                                                        <form id="notificationForm">
+                                                            <!-- Email Notifications -->
+                                                            <div class="notification-group">
+                                                                <h6>Email Notifications</h6>
+                                                                <div class="form-check form-switch mb-2">
+                                                                    <input class="form-check-input" type="checkbox" id="emailTransactions" name="emailTransactions">
+                                                                    <label class="form-check-label" for="emailTransactions">Transaction Updates</label>
+                                                                </div>
+                                                                <div class="form-check form-switch mb-2">
+                                                                    <input class="form-check-input" type="checkbox" id="emailSecurity" name="emailSecurity">
+                                                                    <label class="form-check-label" for="emailSecurity">Security Alerts</label>
+                                                                </div>
+                                                                <div class="form-check form-switch mb-2">
+                                                                    <input class="form-check-input" type="checkbox" id="emailMarketing" name="emailMarketing">
+                                                                    <label class="form-check-label" for="emailMarketing">Marketing Updates</label>
+                                                                </div>
+                                                            </div>
+                                            
+                                                            <!-- Push Notifications -->
+                                                            <div class="notification-group">
+                                                                <h6>Push Notifications</h6>
+                                                                <div class="form-check form-switch mb-2">
+                                                                    <input class="form-check-input" type="checkbox" id="pushTransactions" name="pushTransactions">
+                                                                    <label class="form-check-label" for="pushTransactions">Transaction Updates</label>
+                                                                </div>
+                                                                <div class="form-check form-switch mb-2">
+                                                                    <input class="form-check-input" type="checkbox" id="pushSecurity" name="pushSecurity">
+                                                                    <label class="form-check-label" for="pushSecurity">Security Alerts</label>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                            <!-- Privacy Settings -->
+                            <div class="tab-pane fade" id="privacy-settings">
+                                <div class="card settings-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Privacy Settings</h5>
+                                        <form id="privacyForm">
+                                            <div class="mb-3">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="profileVisible">
+                                                    <label class="form-check-label">Make profile visible to other users</label>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="activityVisible">
+                                                    <label class="form-check-label">Show activity to contacts</label>
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">
+                                                Save Privacy Settings
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <!-- Danger Zone -->
+                            <div class="tab-pane fade" id="danger-zone">
+                                <div class="card settings-card border-danger">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-danger">Danger Zone</h5>
+                                        <div class="alert alert-warning">
+                                            <i class="bi bi-exclamation-triangle-fill"></i>
+                                            These actions are irreversible. Please proceed with caution.
+                                        </div>
+                                        <div class="mb-3">
+                                            <button class="btn btn-outline-danger" data-bs-toggle="modal" 
+                                                    data-bs-target="#deleteAccountModal">
+                                                <i class="bi bi-trash"></i> Delete Account
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+<!-- Add Payment Method Modal -->
+<div class="modal fade" id="addPaymentMethodModal" tabindex="-1" aria-labelledby="addPaymentMethodLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addPaymentMethodLabel">Add Payment Method</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#cardTab" type="button" role="tab">Credit/Debit Card</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#bankTab" type="button" role="tab">Bank Account</button>
+                    </li>
+                </ul>
+                <div class="tab-content mt-3">
+                    <div class="tab-pane fade show active" id="cardTab" role="tabpanel">
+                        <form id="cardForm">
+                            <div class="mb-3">
+                                <label for="cardNumber" class="form-label">Card Number</label>
+                                <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456" pattern="\d{16}" required>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="cardExpiry" class="form-label">Expiry Date</label>
+                                    <input type="text" class="form-control" id="cardExpiry" placeholder="MM/YY" pattern="\d{2}/\d{2}" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="cardCvv" class="form-label">CVV</label>
+                                    <input type="text" class="form-control" id="cardCvv" placeholder="123" pattern="\d{3,4}" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="cardName" class="form-label">Name on Card</label>
+                                <input type="text" class="form-control" id="cardName" required>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade" id="bankTab" role="tabpanel">
+                        <form id="bankForm">
+                            <div class="mb-3">
+                                <label for="accountName" class="form-label">Account Holder Name</label>
+                                <input type="text" class="form-control" id="accountName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="bankName" class="form-label">Bank Name</label>
+                                <input type="text" class="form-control" id="bankName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="accountNumber" class="form-label">Account Number</label>
+                                <input type="text" class="form-control" id="accountNumber" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="routingNumber" class="form-label">Routing Number</label>
+                                <input type="text" class="form-control" id="routingNumber" required>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary" form="cardForm">Add Payment Method</button>
+            </div>
+        </div>
+    </div>
+</div>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="savePaymentMethod">Add Payment Method</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Delete Account Modal -->
+<div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger" id="deleteAccountModalLabel">Delete Account</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    This action cannot be undone. Please be certain.
+                </div>
+                <form id="deleteAccountForm">
+                    <div class="mb-3">
+                        <label for="deleteReason" class="form-label">Please tell us why you're leaving:</label>
+                        <select class="form-select" id="deleteReason" required>
+                            <option value="">Select a reason</option>
+                            <option value="not_useful">Service not useful</option>
+                            <option value="too_expensive">Too expensive</option>
+                            <option value="better_alternative">Found better alternative</option>
+                            <option value="other">Other reason</option>
+                        </select>
+                    </div>
+                    <div class="mb-3 d-none" id="otherReasonDiv">
+                        <label for="otherReason" class="form-label">Please specify:</label>
+                        <textarea class="form-control" id="otherReason"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="deleteConfirmPassword" class="form-label">Confirm your password:</label>
+                        <input type="password" class="form-control" id="deleteConfirmPassword" required>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="deleteConfirm" required>
+                        <label class="form-check-label" for="deleteConfirm">
+                            I understand that this will permanently delete my account and all associated data
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteAccount">Delete Account</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 2FA Setup Modal -->
+<div class="modal fade" id="setup2FAModal" tabindex="-1" aria-labelledby="setup2FAModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="setup2FAModalLabel">Set Up Two-Factor Authentication</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="qrCode" src="" alt="QR Code" class="img-fluid">
+                <p class="mt-2">Scan this QR code with your authenticator app</p>
+                <div class="mb-3">
+                    <label for="verificationCode" class="form-label">Enter verification code:</label>
+                    <input type="text" class="form-control" id="verificationCode">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="verify2FA">Verify</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Success Toast -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div class="toast" role="alert" id="successToast" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header bg-success text-white">
+            <i class="bi bi-check-circle me-2"></i>
+            <strong class="me-auto">Success</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body"></div>
+    </div>
+</div>
+
+<!-- Error Toast -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div class="toast" role="alert" id="errorToast" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header bg-danger text-white">
+            <i class="bi bi-exclamation-circle me-2"></i>
+            <strong class="me-auto">Error</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body"></div>
+    </div>
+</div>
