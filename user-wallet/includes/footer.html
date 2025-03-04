@@ -1,1 +1,26 @@
 
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Custom JS -->
+<script src="../assets/js/main.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Get user information from localStorage or an API
+        getUserInfo();
+
+        // Get notification count
+        getNotificationCount();
+
+        // Set interval to update notification count every minute
+        setInterval(getNotificationCount, 60000);
+    });
+
+    function getUserInfo() {
+        // Example: Fetch user info from localStorage (assuming it's stored after login)
+        const firstName = localStorage.getItem("first_name") || "John";
+        const lastName = localStorage.getItem("last_name") || "Doe";
+
+        // Update user full name in the header
+        document.getElementById("userFullName").textContent = firstName + " " + lastName;
+    }
