@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Vanilla Digital Wallet</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../assets/css/style.css" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar navbar-dark sticky-top bg-primary flex-md-nowrap p-0 shadow">
+        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="dashboard.html">
+            <i class="bi bi-wallet2"></i> Vanilla Wallet
+        </a>
+        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="w-100"></div>
+        <div class="navbar-nav">
+            <div class="nav-item text-nowrap d-flex align-items-center">
+                <a class="nav-link px-3 position-relative" href="notifications.html">
+                    <i class="bi bi-bell"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger notification-badge" id="notificationCount">
+                        3
+                    </span>
+                </a>
+                <div class="dropdown">
+                    <a class="nav-link px-3 dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span id="userFullName">John Doe</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="profile.html"><i class="bi bi-person"></i> Profile</a></li>
+                        <li><a class="dropdown-item" href="settings.html"><i class="bi bi-gear"></i> Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="login.html"><i class="bi bi-box-arrow-right"></i> Sign out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="dashboard.html">
+                                <i class="bi bi-speedometer2 me-2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="transactions.html">
+                                <i class="bi bi-list-ul me-2"></i>
+                                Transactions
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="send-money.html">
+                                <i class="bi bi-send me-2"></i>
+                                Send Money
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="deposit.html">
+                                <i class="bi bi-plus-circle me-2"></i>
+                                Deposit
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="withdraw.html">
+                                <i class="bi bi-dash-circle me-2"></i>
+                                Withdraw
+                            </a>
+                        </li>
+                    </ul>
+
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>Account</span>
+                    </h6>
+                    <ul class="nav flex-column mb-2">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="profile.html">
+                                <i class="bi bi-person me-2"></i>
+                                Profile
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="settings.html">
+                                <i class="bi bi-gear me-2"></i>
+                                Settings
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="login.html">
+                                <i class="bi bi-box-arrow-right me-2"></i>
+                                Sign out
+                            </a>
+                        </li>
+                    </ul>
+
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>Help & Support</span>
+                    </h6>
+                    <ul class="nav flex-column mb-2">
+                        <li class="nav-item">
+                            <a class="nav-link" href="help-center.html">
+                                <i class="bi bi-question-circle me-2"></i>
+                                Help Center
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="support-tickets.html">
+                                <i class="bi bi-ticket me-2"></i>
+                                Support Tickets
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">My Profile</h1>
+                    <button class="btn btn-sm btn-outline-primary" id="editProfileBtn">
+                        <i class="bi bi-pencil"></i> Edit Profile
+                    </button>
+                </div>
+                
+                <!-- Profile Information Section -->
+                <div class="row mb-4">
+                    <div class="col-lg-4 mb-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <div class="position-relative d-inline-block mb-3">
+                                    <img src="https://via.placeholder.com/150" class="rounded-circle border" width="150" height="150" id="profileImage" alt="Profile">
+                                    <div class="position-absolute bottom-0 end-0 bg-primary text-white rounded-circle p-2" style="cursor: pointer;" id="changeImageBtn">
+                                        <i class="bi bi-camera"></i>
+                                    </div>
+                                    <input type="file" id="profileImageUpload" style="display: none;" accept="image/*">
+                                </div>
+                                <h4 id="profileName">John Doe</h4>
+                                <p class="text-muted mb-3" id="profileEmail">john.doe@example.com</p>
+                                <p><span class="badge bg-success" id="verificationStatus">Verified</span></p>
+                            </div>
+                        </div>
+                        
+                        <div class="card mt-3">
+                            <div class="card-header">
+                                <h5 class="mb-0">Wallet Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label text-muted">Wallet ID</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="walletId" value="WALL-123456" readonly>
+                                        <button class="btn btn-outline-secondary" type="button" id="copyWalletId">
+                                            <i class="bi bi-clipboard"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label text-muted">Account Created</label>
+                                    <p id="accountCreated">April 15, 2023</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Personal Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="profileForm">
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label for="firstName" class="form-label">First Name</label>
+                                            <input type="text" class="form-control" id="firstName" value="John" readonly>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="lastName" class="form-label">Last Name</label>
+                                            <input type="text" class="form-control" id="lastName" value="Doe" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email Address</label>
+                                        <input type="email" class="form-control" id="email" value="john.doe@example.com" readonly>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="phone" class="form-label">Phone Number</label>
+                                        <input type="tel" class="form-control" id="phone" value="+1 (555) 123-4567" readonly>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="address" class="form-label">Address</label>
+                                        <input type="text" class="form-control" id="address" value="123 Main St, Anytown, USA" readonly>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label for="city" class="form-label">City</label>
+                                            <input type="text" class="form-control" id="city" value="Anytown" readonly>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="state" class="form-label">State</label>
+                                            <input type="text" class="form-control" id="state" value="CA" readonly>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="zipCode" class="form-label">Zip Code</label>
+                                            <input type="text" class="form-control" id="zipCode" value="12345" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="country" class="form-label">Country</label>
+                                        <input type="text" class="form-control" id="country" value="United States" readonly>
+                                    </div>
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                        <button type="button" class="btn btn-secondary me-md-2" id="cancelEditBtn" style="display: none;">Cancel</button>
+                                        <button type="submit" class="btn btn-primary" id="saveProfileBtn" style="display: none;">Save Changes</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <div class="card mt-3">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Verification Documents</h5>
+                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#uploadDocumentModal">
+                                    <i class="bi bi-upload"></i> Upload Document
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Document Type</th>
+                                                <th>Date Uploaded</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="documentsList">
+                                            <tr>
+                                                <td>ID Card</td>
+                                                <td>Apr 16, 2023</td>
+                                                <td><span class="badge bg-success">Approved</span></td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary" title="View Document">
+                                                        <i class="bi bi-eye"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Proof of Address</td>
+                                                <td>Apr 16, 2023</td>
+                                                <td><span class="badge bg-warning">Pending</span></td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary" title="View Document">
+                                                        <i class="bi bi-eye"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Change Password Card -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Security Settings</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Change Password</h6>
+                                <form id="changePasswordForm">
+                                    <div class="mb-3">
+                                        <label for="currentPassword" class="form-label">Current Password</label>
+                                        <input type="password" class="form-control" id="currentPassword" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="newPassword" class="form-label">New Password</label>
+                                        <input type="password" class="form-control" id="newPassword" required>
+                                        <div class="progress mt-2" style="height: 5px;">
+                                            <div id="passwordStrength" class="progress-bar bg-danger" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Weak</div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="confirmNewPassword" class="form-label">Confirm New Password</label>
+                                        <input type="password" class="form-control" id="confirmNewPassword" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary" id="changePasswordBtn">Change Password</button>
+                                </form>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Two-Factor Authentication</h6>
+                                <p>Add an extra layer of security to your account by enabling two-factor authentication.</p>
+                                <div class="mb-3 form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="twoFactorToggle">
+                                    <label class="form-check-label" for="twoFactorToggle">Enable Two-Factor Authentication</label>
+                                </div>
+                                <div id="twoFactorSetup" style="display: none;">
+                                    <div class="alert alert-info">
+                                        <p>Scan the QR code below with your authentication app (like Google Authenticator or Authy).</p>
+                                    </div>
+                                    <div class="text-center mb-3">
+                                        <img src="../assets/images/qr-placeholder.png" alt="QR Code" class="img-fluid border p-2" style="max-width: 200px;">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="authCode" class="form-label">Enter Authentication Code</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="authCode" placeholder="6-digit code">
+                                            <button class="btn btn-outline-primary" type="button" id="verifyCodeBtn">Verify</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Upload Document Modal -->
+    <div class="modal fade" id="uploadDocumentModal" tabindex="-1" aria-labelledby="uploadDocumentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="uploadDocumentModalLabel">Upload Verification Document</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="uploadDocumentForm">
+                        <div class="mb-3">
+                            <label for="documentType" class="form-label">Document Type</label>
+                            <select class="form-select" id="documentType" required>
+                                <option value="">Select document type</option>
+                                <option value="id_card">ID Card</option>
+                                <option value="passport">Passport</option>
+                                <option value="driving_license">Driving License</option>
+                                <option value="utility_bill">Utility Bill (Proof of Address)</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="documentFile" class="form-label">Upload Document</label>
+                            <input type="file" class="form-control" id="documentFile" required>
+                            <div class="form-text">Supported formats: JPG, PNG, PDF. Max size: 5MB.</div>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="documentConsent" required>
+                            <label class="form-check-label" for="documentConsent">
+                                I confirm that the information provided is correct and the document is valid.
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="submitDocumentBtn">Upload Document</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../assets/js/main.js"></script>
+
+    <script>
+    $(document).ready(function() {
+        // Toggle edit profile
+        $('#editProfileBtn').click(function() {
+            toggleProfileEdit(true);
+        });
+        
+        // Cancel edit profile
+        $('#cancelEditBtn').click(function() {
+            toggleProfileEdit(false);
+            // Reset form to original values
+            fetchUserProfile();
+        });
+        
+        // Save profile changes
+        $('#profileForm').submit(function(e) {
+            e.preventDefault();
+            
+            // Show loading state
+            $('#saveProfileBtn').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...').prop('disabled', true);
+            
+            // Simulate API call
+            simulateUpdateProfileAPI();
+        });
+        
+        // Change profile image
+        $('#changeImageBtn').click(function() {
+            $('#profileImageUpload').click();
+        });
+        
+        $('#profileImageUpload').change(function() {
+            if (this.files && this.files[0]) {
+                var reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    $('#profileImage').attr('src', e.target.result);
+                    
+                    // Simulate upload API call
+                    simulateImageUploadAPI();
+                }
+                
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+        
+        // Copy wallet ID
+        $('#copyWalletId').click(function() {
+            var walletId = $('#walletId').val();
+            
+            // Create temporary input
+            var temp = $('<input>');
+            $('body').append(temp);
+            temp.val(walletId).select();
+            document.execCommand('copy');
+            temp.remove();
+            
+            // Show copied message
+            $(this).html('<i class="bi bi-check2"></i>');
+            setTimeout(function() {
+                $('#copyWalletId').html('<i class="bi bi-clipboard"></i>');
+            }, 2000);
+        });
+        
+        // Password strength meter
+        $('#newPassword').on('input', function() {
+            const password = $(this).val();
+            let strength = 0;
+            
+            // Length check
+            if (password.length >= 8) strength += 1;
+            if (password.length >= 12) strength += 1;
+            
+            // Complexity checks
+            if (/[A-Z]/.test(password)) strength += 1;
+            if (/[a-z]/.test(password)) strength += 1;
+            if (/[0-9]/.test(password)) strength += 1;
+            if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+            
+            // Cap at 4
+            strength = Math.min(strength, 4);
+            
+            // Update progress bar
+            const strengthClasses = ['bg-danger', 'bg-warning', 'bg-info', 'bg-primary', 'bg-success'];
+            const strengthLabels = ['Very Weak', 'Weak', 'Medium', 'Strong', 'Very Strong'];
+            
+            $('#passwordStrength')
+                .removeClass('bg-danger bg-warning bg-info bg-primary bg-success')
+                .addClass(strengthClasses[strength])
+                .css('width', ((strength + 1) * 20) + '%')
+                .text(strengthLabels[strength])
+                .attr('aria-valuenow', (strength + 1) * 20);
+        });
+        
+        // Change password form
+        $('#changePasswordForm').submit(function(e) {
+            e.preventDefault();
+            
+            const currentPassword = $('#currentPassword').val();
+            const newPassword = $('#newPassword').val();
+            const confirmNewPassword = $('#confirmNewPassword').val();
+            
+            // Validate form data
+            if (!currentPassword || !newPassword || !confirmNewPassword) {
+                alert('Please fill in all password fields.');
+                return;
+            }
+            
+            // Validate password strength
+            if (newPassword.length < 8) {
+                alert('New password must be at least 8 characters long.');
+                return;
+            }
+            
+            // Check if passwords match
+            if (newPassword !== confirmNewPassword) {
+                alert('New passwords do not match.');
+                return;
+            }
+            
+            // Show loading state
+            $('#changePasswordBtn').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Changing...').prop('disabled', true);
+            
+            // Simulate API call
+            simulateChangePasswordAPI();
+        });
+        
+        // Two-factor authentication toggle
+        $('#twoFactorToggle').change(function() {
+            if ($(this).is(':checked')) {
+                $('#twoFactorSetup').slideDown();
+            } else {
+                $('#twoFactorSetup').slideUp();
+            }
+        });
+        
+        // Verify 2FA code
+        $('#verifyCodeBtn').click(function() {
+            const code = $('#authCode').val();
+            
+            if (!code || code.length !== 6) {
+                alert('Please enter a valid 6-digit code.');
+                return;
+            }
+            
+            // Show loading state
+            $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>').prop('disabled', true);
+            
+            // Simulate API call
+            simulateVerify2FAAPI(code);
+        });
+        
+        // Upload document
+        $('#submitDocumentBtn').click(function() {
+            const documentType = $('#documentType').val();
+            const documentFile = $('#documentFile').prop('files')[0];
+            const documentConsent = $('#documentConsent').prop('checked');
+            
+            // Validate form data
+            if (!documentType) {
+                alert('Please select a document type.');
+                return;
+            }
+            
+            if (!documentFile) {
+                alert('Please select a file to upload.');
+                return;
+            }
+            
+            if (!documentConsent) {
+                alert('Please confirm that the information is correct.');
+                return;
+            }
+            
+            // Show loading state
+            $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Uploading...').prop('disabled', true);
+            
+            // Simulate API call
+            simulateDocumentUploadAPI();
+        });
+        
+        // Load initial user profile data
+        fetchUserProfile();
+    });
+
+    // Fetch user profile data
+    function fetchUserProfile() {
+        // In a real app, this would be an AJAX call to get user data
+        // For demo, we use hardcoded values already in the HTML
+    }
+
+    // Toggle profile edit mode
+    function toggleProfileEdit(editMode) {
+        if (editMode) {
+            // Enable form fields
+            $('#firstName, #lastName, #phone, #address, #city, #state, #zipCode, #country').prop('readonly', false);
+            
+            // Show save and cancel buttons
+            $('#saveProfileBtn, #cancelEditBtn').show();
+            
+            // Hide edit button
+            $('#editProfileBtn').hide();
+        } else {
+            // Disable form fields
+            $('#firstName, #lastName, #phone, #address, #city, #state, #zipCode, #country').prop('readonly', true);
+            
+            // Hide save and cancel buttons
+            $('#saveProfileBtn, #cancelEditBtn').hide();
+            
+            // Show edit button
+            $('#editProfileBtn').show();
+        }
+    }
+
+    // Simulate update profile API call
+    function simulateUpdateProfileAPI() {
+        // Simulate API delay
+        setTimeout(function() {
+            // Get updated profile data
+            const firstName = $('#firstName').val();
+            const lastName = $('#lastName').val();
+            
+            // Update profile name
+            $('#profileName').text(firstName + ' ' + lastName);
+            
+            // Display success message
+            alert('Profile updated successfully!');
+            
+            // Reset button state
+            $('#saveProfileBtn').html('Save Changes').prop('disabled', false);
+            
+            // Switch back to view mode
+            toggleProfileEdit(false);
+        }, 1500);
+    }
+
+    // Simulate image upload API call
+    function simulateImageUploadAPI() {
+        // Simulate API delay (no UI changes needed since image is already displayed)
+        setTimeout(function() {
+            // Display success message
+            alert('Profile image updated successfully!');
+        }, 1500);
+    }
+
+    // Simulate change password API call
+    function simulateChangePasswordAPI() {
+        // Simulate API delay
+        setTimeout(function() {
+            // Display success message
+            alert('Password changed successfully!');
+            
+            // Reset form
+            $('#changePasswordForm')[0].reset();
+            
+            // Reset button state
+            $('#changePasswordBtn').html('Change Password').prop('disabled', false);
+            
+            // Reset strength meter
+            $('#passwordStrength')
+                .removeClass('bg-success bg-primary bg-info bg-warning')
+                .addClass('bg-danger')
+                .css('width', '20%')
+                .text('Weak')
+                .attr('aria-valuenow', 20);
+        }, 1500);
+    }
+
+    // Simulate 2FA verification API call
+    function simulateVerify2FAAPI(code) {
+        // Simulate API delay
+        setTimeout(function() {
+            // Display success message
+            alert('Two-factor authentication enabled successfully!');
+            
+            // Reset form
+            $('#authCode').val('');
+            
+            // Reset button state
+            $('#verifyCodeBtn').html('Verify').prop('disabled', false);
+            
+            // Hide setup UI
+            $('#twoFactorSetup').slideUp();
+        }, 1500);
+    }
+
+    // Simulate document upload API call
+    function simulateDocumentUploadAPI() {
+        // Simulate API delay
+        setTimeout(function() {
+            // Get document type
+            const documentType = $('#documentType option:selected').text();
+            
+            // Add new document to list
+            const newRow = `
+                <tr>
+                    <td>${documentType}</td>
+                    <td>${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
+                    <td><span class="badge bg-warning">Pending</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary" title="View Document">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+            
+            $('#documentsList').append(newRow);
+            
+            // Reset form
+            $('#uploadDocumentForm')[0].reset();
+            
+            // Close modal
+            $('#uploadDocumentModal').modal('hide');
+            
+            // Reset button state
+            $('#submitDocumentBtn').html('Upload Document').prop('disabled', false);
+            
+            // Display success message
+            alert('Document uploaded successfully! It will be reviewed shortly.');
+        }, 1500);
+    }
+    </script>
+</body>
+</html>
