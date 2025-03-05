@@ -1,0 +1,1930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Logs - Vanilla Digital Wallet Admin</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- DataTables CSS -->
+    <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap5.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.bootstrap5.min.css" rel="stylesheet">
+    <!-- Flatpickr CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../assets/css/admin.css" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="position-fixed top-0 start-0 w-100 h-100 d-none">
+        <div class="w-100 h-100 bg-white opacity-75 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="admin-dashboard.html">
+            <i class="bi bi-wallet2"></i> Vanilla Wallet Admin
+        </a>
+        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+        <div class="navbar-nav">
+            <div class="nav-item text-nowrap d-flex align-items-center">
+                <a class="nav-link px-3 position-relative" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-bell"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger notification-badge">
+                        5
+                    </span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end p-0" aria-labelledby="notificationsDropdown" style="width: 300px;">
+                    <div class="p-2 border-bottom bg-light">
+                        <h6 class="mb-0">Notifications</h6>
+                    </div>
+                    <div class="notification-list" style="max-height: 300px; overflow-y: auto;">
+                        <!-- Notification items would be here -->
+                    </div>
+                    <div class="p-2 border-top bg-light d-flex justify-content-center">
+                        <a href="notifications.html" class="text-decoration-none">View all notifications</a>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <a class="nav-link px-3 dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span>Admin User</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="admin-profile.html"><i class="bi bi-person me-2"></i> Profile</a></li>
+                        <li><a class="dropdown-item" href="admin-settings.html"><i class="bi bi-gear me-2"></i> Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="admin-login.html"><i class="bi bi-box-arrow-right me-2"></i> Sign out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="admin-dashboard.html">
+                                <i class="bi bi-speedometer2 me-2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="users.html">
+                                <i class="bi bi-people me-2"></i>
+                                Users
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="transactions.html">
+                                <i class="bi bi-cash-stack me-2"></i>
+                                Transactions
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="kyc-verification.html">
+                                <i class="bi bi-shield-check me-2"></i>
+                                KYC Verification
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="support-tickets.html">
+                                <i class="bi bi-ticket-detailed me-2"></i>
+                                Support Tickets
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="system-logs.html">
+                                <i class="bi bi-file-text me-2"></i>
+                                System Logs
+                            </a>
+                        </li>
+                    </ul>
+
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>Reports & Analytics</span>
+                    </h6>
+                    <ul class="nav flex-column mb-2">
+                        <li class="nav-item">
+                            <a class="nav-link" href="financial-reports.html">
+                                <i class="bi bi-graph-up me-2"></i>
+                                Financial Reports
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="user-analytics.html">
+                                <i class="bi bi-pie-chart me-2"></i>
+                                User Analytics
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="audit-trail.html">
+                                <i class="bi bi-list-check me-2"></i>
+                                Audit Trail
+                            </a>
+                        </li>
+                    </ul>
+
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>System Management</span>
+                    </h6>
+                    <ul class="nav flex-column mb-2">
+                        <li class="nav-item">
+                            <a class="nav-link" href="account-limits.html">
+                                <i class="bi bi-sliders me-2"></i>
+                                Account Limits
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="fee-management.html">
+                                <i class="bi bi-percent me-2"></i>
+                                Fee Management
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="system-settings.html">
+                                <i class="bi bi-gear me-2"></i>
+                                System Settings
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="admin-users.html">
+                                <i class="bi bi-person-badge me-2"></i>
+                                Admin Users
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">System Logs</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" id="refreshLogs">
+                                <i class="bi bi-arrow-repeat me-1"></i> Refresh
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" id="exportLogs">
+                                <i class="bi bi-download me-1"></i> Export
+                            </button>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="logsTimeRange" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-calendar me-1"></i> Last 24 Hours
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="logsTimeRange">
+                                <li><a class="dropdown-item active" href="#" data-range="24hours">Last 24 Hours</a></li>
+                                <li><a class="dropdown-item" href="#" data-range="7days">Last 7 Days</a></li>
+                                <li><a class="dropdown-item" href="#" data-range="30days">Last 30 Days</a></li>
+                                <li><a class="dropdown-item" href="#" data-range="custom">Custom Range</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Log Stats Cards -->
+                <div class="row row-cols-1 row-cols-md-4 g-4 mb-4">
+                    <div class="col">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="<div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h6 class="card-title text-muted">Total Log Entries</h6>
+                                        <h2 class="mt-2 mb-0">124,568</h2>
+                                        <p class="text-success mb-0"><i class="bi bi-arrow-up"></i> 12.5% <span class="text-muted">vs last period</span></p>
+                                    </div>
+                                    <div class="bg-primary bg-opacity-10 rounded-circle p-3">
+                                        <i class="bi bi-file-text text-primary fs-4"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h6 class="card-title text-muted">Error Events</h6>
+                                        <h2 class="mt-2 mb-0">245</h2>
+                                        <p class="text-danger mb-0"><i class="bi bi-arrow-up"></i> 8.3% <span class="text-muted">vs last period</span></p>
+                                    </div>
+                                    <div class="bg-danger bg-opacity-10 rounded-circle p-3">
+                                        <i class="bi bi-exclamation-triangle text-danger fs-4"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h6 class="card-title text-muted">Security Events</h6>
+                                        <h2 class="mt-2 mb-0">1,872</h2>
+                                        <p class="text-success mb-0"><i class="bi bi-arrow-down"></i> 5.7% <span class="text-muted">vs last period</span></p>
+                                    </div>
+                                    <div class="bg-warning bg-opacity-10 rounded-circle p-3">
+                                        <i class="bi bi-shield-exclamation text-warning fs-4"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h6 class="card-title text-muted">System Uptime</h6>
+                                        <h2 class="mt-2 mb-0">99.98%</h2>
+                                        <p class="text-success mb-0"><i class="bi bi-arrow-up"></i> 0.1% <span class="text-muted">vs last period</span></p>
+                                    </div>
+                                    <div class="bg-success bg-opacity-10 rounded-circle p-3">
+                                        <i class="bi bi-server text-success fs-4"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Log Filters -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Filter Logs</h5>
+                        <form id="logFilterForm" class="row g-3">
+                            <div class="col-md-3">
+                                <label for="logLevelFilter" class="form-label">Log Level</label>
+                                <select class="form-select" id="logLevelFilter">
+                                    <option value="">All Levels</option>
+                                    <option value="info">Info</option>
+                                    <option value="warning">Warning</option>
+                                    <option value="error">Error</option>
+                                    <option value="critical">Critical</option>
+                                    <option value="debug">Debug</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="logModuleFilter" class="form-label">Module</label>
+                                <select class="form-select" id="logModuleFilter">
+                                    <option value="">All Modules</option>
+                                    <option value="authentication">Authentication</option>
+                                    <option value="payment">Payment Processing</option>
+                                    <option value="kyc">KYC Verification</option>
+                                    <option value="user">User Management</option>
+                                    <option value="transaction">Transaction System</option>
+                                    <option value="security">Security</option>
+                                    <option value="admin">Admin Actions</option>
+                                    <option value="api">API</option>
+                                    <option value="system">System</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="dateRangeFilter" class="form-label">Date Range</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="startDateFilter" placeholder="Start Date">
+                                    <span class="input-group-text">to</span>
+                                    <input type="text" class="form-control" id="endDateFilter" placeholder="End Date">
+                                </div>
+                            </div>
+                            <div class="col-md-2 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="bi bi-search me-1"></i> Filter Logs
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="searchKeywords" class="form-label">Keywords</label>
+                                <input type="text" class="form-control" id="searchKeywords" placeholder="Search in log message or description...">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="ipAddressFilter" class="form-label">IP Address</label>
+                                <input type="text" class="form-control" id="ipAddressFilter" placeholder="e.g. 192.168.1.1">
+                            </div>
+                            <div class="col-md-2 d-flex align-items-end">
+                                <button type="button" class="btn btn-outline-secondary w-100" id="clearFilters">
+                                    <i class="bi bi-x-circle me-1"></i> Clear Filters
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- System Logs Table -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="systemLogsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Timestamp</th>
+                                        <th>Level</th>
+                                        <th>Module</th>
+                                        <th>Event</th>
+                                        <th>IP Address</th>
+                                        <th>User/System</th>
+                                        <th>Message</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>2023-03-23 15:42:36</td>
+                                        <td><span class="badge bg-danger">Error</span></td>
+                                        <td>Payment Processing</td>
+                                        <td>Payment Gateway Error</td>
+                                        <td>203.0.113.42</td>
+                                        <td>User ID: 15478</td>
+                                        <td>Failed to process payment: Invalid card details</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewLogModal">View</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-03-23 15:30:12</td>
+                                        <td><span class="badge bg-warning text-dark">Warning</span></td>
+                                        <td>Security</td>
+                                        <td>Failed Login Attempt</td>
+                                        <td>45.67.89.123</td>
+                                        <td>email: john.doe@example.com</td>
+                                        <td>Multiple failed login attempts detected</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewLogModal">View</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-03-23 15:25:45</td>
+                                        <td><span class="badge bg-info text-dark">Info</span></td>
+                                        <td>User Management</td>
+                                        <td>User Registration</td>
+                                        <td>192.168.1.105</td>
+                                        <td>System</td>
+                                        <td>New user registered successfully</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewLogModal">View</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-03-23 15:15:22</td>
+                                        <td><span class="badge bg-warning text-dark">Warning</span></td>
+                                        <td>KYC Verification</td>
+                                        <td>Document Validation</td>
+                                        <td>172.16.254.1</td>
+                                        <td>User ID: 15477</td>
+                                        <td>Document upload failed: Invalid format</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewLogModal">View</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-03-23 15:10:18</td>
+                                        <td><span class="badge bg-success">Debug</span></td>
+                                        <td>API</td>
+                                        <td>API Request</td>
+                                        <td>198.51.100.245</td>
+                                        <td>API Client: wallet-app</td>
+                                        <td>GET /api/v1/users/balance successful (200 OK)</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewLogModal">View</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-03-23 15:05:34</td>
+                                        <td><span class="badge bg-info text-dark">Info</span></td>
+                                        <td>Transaction System</td>
+                                        <td>Transaction Created</td>
+                                        <td>192.0.2.146</td>
+                                        <td>User ID: 15474</td>
+                                        <td>New transaction #TRX-7891234 created</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewLogModal">View</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-03-23 15:01:22</td>
+                                        <td><span class="badge bg-danger">Critical</span></td>
+                                        <td>System</td>
+                                        <td>Database Connection</td>
+                                        <td>10.0.0.45</td>
+                                        <td>System</td>
+                                        <td>Database connection failed - retrying (2/5)</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewLogModal">View</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-03-23 15:00:12</td>
+                                        <td><span class="badge bg-info text-dark">Info</span></td>
+                                        <td>Admin</td>
+                                        <td>Admin Login</td>
+                                        <td>192.168.1.25</td>
+                                        <td>Admin ID: A-42</td>
+                                        <td>Admin user logged in successfully</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewLogModal">View</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-03-23 14:55:43</td>
+                                        <td><span class="badge bg-secondary">Notice</span></td>
+                                        <td>System</td>
+                                        <td>System Maintenance</td>
+                                        <td>10.0.0.1</td>
+                                        <td>System</td>
+                                        <td>Scheduled maintenance completed successfully</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewLogModal">View</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-03-23 14:50:19</td>
+                                        <td><span class="badge bg-info text-dark">Info</span></td>
+                                        <td>Authentication</td>
+                                        <td>User Login</td>
+                                        <td>192.168.1.105</td>
+                                        <td>User ID: 15478</td>
+                                        <td>User logged in successfully</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewLogModal">View</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pagination -->
+                <nav aria-label="System logs pagination" class="d-flex justify-content-center">
+                    <ul class="pagination">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </main>
+        </div>
+    </div>
+
+    <!-- View Log Modal -->
+    <div class="modal fade" id="viewLogModal" tabindex="-1" aria-labelledby="viewLogModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewLogModalLabel">Log Entry Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Timestamp</label>
+                                <p>2023-03-23 15:42:36 UTC</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Log Level</label>
+                                <p><span class="badge bg-danger">Error</span></p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Module</label>
+                                <p>Payment Processing</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Event</label>
+                                <p>Payment Gateway Error</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">IP Address</label>
+                                <p>203.0.113.42 (New York, US)</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">User/System</label>
+                                <p>User ID: 15478 (John Doe)</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Correlation ID</label>
+                                <p>c0rr-8765-4321-9876</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Request ID</label>
+                                <p>req-abcd-efgh-1234</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Message</label>
+                        <p>Failed to process payment: Invalid card details</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Details</label>
+                        <div class="bg-light p-3 rounded">
+                            <pre class="mb-0"><code>{
+  "error": {
+    "code": "PAYMENT_ERROR_4032",
+    "message": "Invalid card details",
+    "details": {
+      "transaction_id": "TRX-7891234",
+      "amount": "1250.00",
+      "currency": "USD",
+      "payment_method": "credit_card",
+      "card_details": {
+        "card_number": "****4567",
+        "expiry": "**/**"
+      },
+      "gateway_response": {
+        "code": "E4032",
+        "message": "Card verification failed: invalid expiry date"
+      }
+    }
+  },
+  "request_path": "/api/v1/payments/process",
+  "method": "POST",
+  "timestamp": "2023-03-23T15:42:36Z"
+}</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Stack Trace</label>
+                        <div class="bg-light p-3 rounded" style="max-height: 200px; overflow-y: auto;">
+                            <pre class="mb-0"><code>com.vanillawallet.payment.ProcessingException: Invalid card details
+  at com.vanillawallet.payment.gateway.CardProcessor.validate(CardProcessor.java:254)
+  at com.vanillawallet.payment.gateway.PaymentGateway.processPayment(PaymentGateway.java:123)
+  at com.vanillawallet.payment.PaymentService.executePayment(PaymentService.java:87)
+  at com.vanillawallet.api.PaymentController.processPayment(PaymentController.java:65)
+  at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+  at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+  at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+  ...</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Related Events</label>
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="badge bg-info text-dark me-2">Info</span>
+                                    Payment processing initiated
+                                </div>
+                                <small class="text-muted">2023-03-23 15:42:30</small>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="badge bg-warning text-dark me-2">Warning</span>
+                                    Card validation error
+                                </div>
+                                <small class="text-muted">2023-03-23 15:42:34</small>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="badge bg-danger me-2">Error</span>
+                                    Payment gateway error
+                                </div>
+                                <small class="text-muted">2023-03-23 15:42:36</small>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="badge bg-info text-dark me-2">Info</span>
+                                    User notified of payment failure
+                                </div>
+                                <small class="text-muted">2023-03-23 15:42:40</small>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Download Log</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Date Range Picker Modal -->
+    <div class="modal fade" id="dateRangeModal" tabindex="-1" aria-labelledby="dateRangeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="dateRangeModalLabel">Select Date Range</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="customStartDate" class="form-label">Start Date</label>
+                        <input type="text" class="form-control" id="customStartDate">
+                    </div>
+                    <div class="mb-3">
+                        <label for="customEndDate" class="form-label">End Date</label>
+                        <input type="text" class="form-control" id="customEndDate">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="applyDateRange">Apply</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.bootstrap5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    
+    <!-- System Logs JS -->
+    <script>
+        $(document).ready(function() {
+            // Initialize DataTable
+            var table = $('#systemLogsTable').DataTable({
+                responsive: true,
+                lengthChange: true,
+                pageLength: 10,
+                lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                dom: '<"row"<"col-sm-6"B><"col-sm-6"f>>rt<"row"<"col-sm-6"l><"col-sm-6"p>>',
+                buttons: [
+                    {
+                        extend: 'collection',
+                        text: '<i class="bi bi-download"></i> Export',
+                        className: 'btn-sm btn-outline-secondary',
+                        buttons: [
+                            {
+                                extend: 'csv',
+                                text: 'Export as CSV',
+                                className: 'dropdown-item',
+                                exportOptions: {
+                                    columns: ':visible'
+                                }
+                            },
+                            {
+                                extend: 'excel',
+                                text: 'Export as Excel',
+                                className: 'dropdown-item',
+                                exportOptions: {
+                                    columns: ':visible'
+                                }
+                            },
+                            {
+                                extend: 'pdf',
+                                text: 'Export as PDF',
+                                className: 'dropdown-item',
+                                exportOptions: {
+                                    columns: ':visible'
+                                }
+                            }
+                        ]
+                    }
+                ]
+            });
+            
+            // Initialize date pickers
+            flatpickr("#startDateFilter", {
+                dateFormat: "Y-m-d H:i",
+                enableTime: true,
+                time_24hr: true,
+                maxDate: "today"
+            });
+            
+            flatpickr("#endDateFilter", {
+                dateFormat: "Y-m-d H:i",
+                enableTime: true,
+                time_24hr: true,
+                maxDate: "today"
+            });
+            
+            flatpickr("#customStartDate", {
+                dateFormat: "Y-m-d H:i",
+                enableTime: true,
+                time_24hr: true,
+                maxDate: "today"
+            });
+            
+            flatpickr("#customEndDate", {
+                dateFormat: "Y-m-d H:i",
+                enableTime: true,
+                time_24hr: true,
+                maxDate: "today"
+            });
+            
+            // Time range dropdown
+            $('.dropdown-item[data-range]').on('click', function(e) {
+                e.preventDefault();
+                const range = $(this).data('range');
+                
+                // Remove active class from all items
+                $('.dropdown-item[data-range]').removeClass('active');
+                // Add active class to the clicked item
+                $(this).addClass('active');
+                
+                if (range === 'custom') {
+                    $('#dateRangeModal').modal('show');
+                } else {
+                    // Update dropdown button text
+                    $('#logsTimeRange').html('<i class="bi bi-calendar me-1"></i> ' + $(this).text());
+                    // Update log data based on selected range
+                    updateLogsData(range);
+                }
+            });
+            
+            // Apply custom date range
+            $('#applyDateRange').on('click', function() {
+                const startDate = $('#customStartDate').val();
+                const endDate = $('#customEndDate').val();
+                
+                if (startDate && endDate) {
+                    // Update dropdown button text
+                    $('#logsTimeRange').html('<i class="bi bi-calendar me-1"></i> ' + startDate + ' - ' + endDate);
+                    // Update log data based on custom date range
+                    updateLogsData('custom', { startDate, endDate });
+                    // Close modal
+                    $('#dateRangeModal').modal('hide');
+                }
+            });
+            
+            // Refresh logs button
+            $('#refreshLogs').on('click', function() {
+                showLoading();
+                setTimeout(function() {
+                    // Refresh logs data
+                    updateLogsData($('.dropdown-item[data-range].active').data('range'));
+                    hideLoading();
+                }, 1000);
+            });
+            
+            // Export logs button
+            $('#exportLogs').on('click', function() {
+                showLoading();
+                setTimeout(function() {
+                    hideLoading();
+                    showToast('System logs exported successfully');
+                }, 1500);
+            });
+            
+            // Log filter form submission
+            $('#logFilterForm').on('submit', function(e) {
+                e.preventDefault();
+                
+                // In a real application, this would make an API call with the filter values
+                // For demo purposes, we'll simulate a loading state
+                <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Logs - Vanilla Digital Wallet Admin</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- DataTables CSS -->
+    <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap5.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.bootstrap5.min.css" rel="stylesheet">
+    <!-- Flatpickr CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../assets/css/admin.css" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="position-fixed top-0 start-0 w-100 h-100 d-none">
+        <div class="w-100 h-100 bg-white opacity-75 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="admin-dashboard.html">
+            <i class="bi bi-wallet2"></i> Vanilla Wallet Admin
+        </a>
+        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+        <div class="navbar-nav">
+            <div class="nav-item text-nowrap d-flex align-items-center">
+                <a class="nav-link px-3 position-relative" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-bell"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger notification-badge">
+                        5
+                    </span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end p-0" aria-labelledby="notificationsDropdown" style="width: 300px;">
+                    <div class="p-2 border-bottom bg-light">
+                        <h6 class="mb-0">Notifications</h6>
+                    </div>
+                    <div class="notification-list" style="max-height: 300px; overflow-y: auto;">
+                        <!-- Notification items would be here -->
+                    </div>
+                    <div class="p-2 border-top bg-light d-flex justify-content-center">
+                        <a href="notifications.html" class="text-decoration-none">View all notifications</a>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <a class="nav-link px-3 dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span>Admin User</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="admin-profile.html"><i class="bi bi-person me-2"></i> Profile</a></li>
+                        <li><a class="dropdown-item" href="admin-settings.html"><i class="bi bi-gear me-2"></i> Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="admin-login.html"><i class="bi bi-box-arrow-right me-2"></i> Sign out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="admin-dashboard.html">
+                                <i class="bi bi-speedometer2 me-2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="users.html">
+                                <i class="bi bi-people me-2"></i>
+                                Users
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="transactions.html">
+                                <i class="bi bi-cash-stack me-2"></i>
+                                Transactions
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="kyc-verification.html">
+                                <i class="bi bi-shield-check me-2"></i>
+                                KYC Verification
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="support-tickets.html">
+                                <i class="bi bi-ticket-detailed me-2"></i>
+                                Support Tickets
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="system-logs.html">
+                                <i class="bi bi-file-text me-2"></i>
+                                System Logs
+                            </a>
+                        </li>
+                    </ul>
+
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>Reports & Analytics</span>
+                    </h6>
+                    <ul class="nav flex-column mb-2">
+                        <li class="nav-item">
+                            <a class="nav-link" href="financial-reports.html">
+                                <i class="bi bi-graph-up me-2"></i>
+                                Financial Reports
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="user-analytics.html">
+                                <i class="bi bi-pie-chart me-2"></i>
+                                User Analytics
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="audit-trail.html">
+                                <i class="bi bi-list-check me-2"></i>
+                                Audit Trail
+                            </a>
+                        </li>
+                    </ul>
+
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>System Management</span>
+                    </h6>
+                    <ul class="nav flex-column mb-2">
+                        <li class="nav-item">
+                            <a class="nav-link" href="account-limits.html">
+                                <i class="bi bi-sliders me-2"></i>
+                                Account Limits
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="fee-management.html">
+                                <i class="bi bi-percent me-2"></i>
+                                Fee Management
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="system-settings.html">
+                                <i class="bi bi-gear me-2"></i>
+                                System Settings
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="admin-users.html">
+                                <i class="bi bi-person-badge me-2"></i>
+                                Admin Users
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">System Logs</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" id="refreshLogs">
+                                <i class="bi bi-arrow-repeat me-1"></i> Refresh
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" id="exportLogs">
+                                <i class="bi bi-download me-1"></i> Export
+                            </button>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="logsTimeRange" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-calendar me-1"></i> Last 24 Hours
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="logsTimeRange">
+                                <li><a class="dropdown-item active" href="#" data-range="24hours">Last 24 Hours</a></li>
+                                <li><a class="dropdown-item" href="#" data-range="7days">Last 7 Days</a></li>
+                                <li><a class="dropdown-item" href="#" data-range="30days">Last 30 Days</a></li>
+                                <li><a class="dropdown-item" href="#" data-range="custom">Custom Range</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Log Stats Cards -->
+                <div class="row row-cols-1 row-cols-md-4 g-4 mb-4">
+                    <div class="col">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="<div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h6 class="card-title text-muted">Total Log Entries</h6>
+                                        <h2 class="mt-2 mb-0">124,568</h2>
+                                        <p class="text-success mb-0"><i class="bi bi-arrow-up"></i> 12.5% <span class="text-muted">vs last period</span></p>
+                                    </div>
+                                    <div class="bg-primary bg-opacity-10 rounded-circle p-3">
+                                        <i class="bi bi-file-text text-primary fs-4"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h6 class="card-title text-muted">Error Events</h6>
+                                        <h2 class="mt-2 mb-0">245</h2>
+                                        <p class="text-danger mb-0"><i class="bi bi-arrow-up"></i> 8.3% <span class="text-muted">vs last period</span></p>
+                                    </div>
+                                    <div class="bg-danger bg-opacity-10 rounded-circle p-3">
+                                        <i class="bi bi-exclamation-triangle text-danger fs-4"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h6 class="card-title text-muted">Security Events</h6>
+                                        <h2 class="mt-2 mb-0">1,872</h2>
+                                        <p class="text-success mb-0"><i class="bi bi-arrow-down"></i> 5.7% <span class="text-muted">vs last period</span></p>
+                                    </div>
+                                    <div class="bg-warning bg-opacity-10 rounded-circle p-3">
+                                        <i class="bi bi-shield-exclamation text-warning fs-4"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h6 class="card-title text-muted">System Uptime</h6>
+                                        <h2 class="mt-2 mb-0">99.98%</h2>
+                                        <p class="text-success mb-0"><i class="bi bi-arrow-up"></i> 0.1% <span class="text-muted">vs last period</span></p>
+                                    </div>
+                                    <div class="bg-success bg-opacity-10 rounded-circle p-3">
+                                        <i class="bi bi-server text-success fs-4"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Log Filters -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Filter Logs</h5>
+                        <form id="logFilterForm" class="row g-3">
+                            <div class="col-md-3">
+                                <label for="logLevelFilter" class="form-label">Log Level</label>
+                                <select class="form-select" id="logLevelFilter">
+                                    <option value="">All Levels</option>
+                                    <option value="info">Info</option>
+                                    <option value="warning">Warning</option>
+                                    <option value="error">Error</option>
+                                    <option value="critical">Critical</option>
+                                    <option value="debug">Debug</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="logModuleFilter" class="form-label">Module</label>
+                                <select class="form-select" id="logModuleFilter">
+                                    <option value="">All Modules</option>
+                                    <option value="authentication">Authentication</option>
+                                    <option value="payment">Payment Processing</option>
+                                    <option value="kyc">KYC Verification</option>
+                                    <option value="user">User Management</option>
+                                    <option value="transaction">Transaction System</option>
+                                    <option value="security">Security</option>
+                                    <option value="admin">Admin Actions</option>
+                                    <option value="api">API</option>
+                                    <option value="system">System</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="dateRangeFilter" class="form-label">Date Range</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="startDateFilter" placeholder="Start Date">
+                                    <span class="input-group-text">to</span>
+                                    <input type="text" class="form-control" id="endDateFilter" placeholder="End Date">
+                                </div>
+                            </div>
+                            <div class="col-md-2 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="bi bi-search me-1"></i> Filter Logs
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="searchKeywords" class="form-label">Keywords</label>
+                                <input type="text" class="form-control" id="searchKeywords" placeholder="Search in log message or description...">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="ipAddressFilter" class="form-label">IP Address</label>
+                                <input type="text" class="form-control" id="ipAddressFilter" placeholder="e.g. 192.168.1.1">
+                            </div>
+                            <div class="col-md-2 d-flex align-items-end">
+                                <button type="button" class="btn btn-outline-secondary w-100" id="clearFilters">
+                                    <i class="bi bi-x-circle me-1"></i> Clear Filters
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- System Logs Table -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="systemLogsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Timestamp</th>
+                                        <th>Level</th>
+                                        <th>Module</th>
+                                        <th>Event</th>
+                                        <th>IP Address</th>
+                                        <th>User/System</th>
+                                        <th>Message</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>2023-03-23 15:42:36</td>
+                                        <td><span class="badge bg-danger">Error</span></td>
+                                        <td>Payment Processing</td>
+                                        <td>Payment Gateway Error</td>
+                                        <td>203.0.113.42</td>
+                                        <td>User ID: 15478</td>
+                                        <td>Failed to process payment: Invalid card details</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewLogModal">View</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-03-23 15:30:12</td>
+                                        <td><span class="badge bg-warning text-dark">Warning</span></td>
+                                        <td>Security</td>
+                                        <td>Failed Login Attempt</td>
+                                        <td>45.67.89.123</td>
+                                        <td>email: john.doe@example.com</td>
+                                        <td>Multiple failed login attempts detected</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewLogModal">View</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-03-23 15:25:45</td>
+                                        <td><span class="badge bg-info text-dark">Info</span></td>
+                                        <td>User Management</td>
+                                        <td>User Registration</td>
+                                        <td>192.168.1.105</td>
+                                        <td>System</td>
+                                        <td>New user registered successfully</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewLogModal">View</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-03-23 15:15:22</td>
+                                        <td><span class="badge bg-warning text-dark">Warning</span></td>
+                                        <td>KYC Verification</td>
+                                        <td>Document Validation</td>
+                                        <td>172.16.254.1</td>
+                                        <td>User ID: 15477</td>
+                                        <td>Document upload failed: Invalid format</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewLogModal">View</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-03-23 15:10:18</td>
+                                        <td><span class="badge bg-success">Debug</span></td>
+                                        <td>API</td>
+                                        <td>API Request</td>
+                                        <td>198.51.100.245</td>
+                                        <td>API Client: wallet-app</td>
+                                        <td>GET /api/v1/users/balance successful (200 OK)</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewLogModal">View</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-03-23 15:05:34</td>
+                                        <td><span class="badge bg-info text-dark">Info</span></td>
+                                        <td>Transaction System</td>
+                                        <td>Transaction Created</td>
+                                        <td>192.0.2.146</td>
+                                        <td>User ID: 15474</td>
+                                        <td>New transaction #TRX-7891234 created</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewLogModal">View</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-03-23 15:01:22</td>
+                                        <td><span class="badge bg-danger">Critical</span></td>
+                                        <td>System</td>
+                                        <td>Database Connection</td>
+                                        <td>10.0.0.45</td>
+                                        <td>System</td>
+                                        <td>Database connection failed - retrying (2/5)</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewLogModal">View</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-03-23 15:00:12</td>
+                                        <td><span class="badge bg-info text-dark">Info</span></td>
+                                        <td>Admin</td>
+                                        <td>Admin Login</td>
+                                        <td>192.168.1.25</td>
+                                        <td>Admin ID: A-42</td>
+                                        <td>Admin user logged in successfully</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewLogModal">View</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-03-23 14:55:43</td>
+                                        <td><span class="badge bg-secondary">Notice</span></td>
+                                        <td>System</td>
+                                        <td>System Maintenance</td>
+                                        <td>10.0.0.1</td>
+                                        <td>System</td>
+                                        <td>Scheduled maintenance completed successfully</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewLogModal">View</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-03-23 14:50:19</td>
+                                        <td><span class="badge bg-info text-dark">Info</span></td>
+                                        <td>Authentication</td>
+                                        <td>User Login</td>
+                                        <td>192.168.1.105</td>
+                                        <td>User ID: 15478</td>
+                                        <td>User logged in successfully</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewLogModal">View</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pagination -->
+                <nav aria-label="System logs pagination" class="d-flex justify-content-center">
+                    <ul class="pagination">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </main>
+        </div>
+    </div>
+
+    <!-- View Log Modal -->
+    <div class="modal fade" id="viewLogModal" tabindex="-1" aria-labelledby="viewLogModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewLogModalLabel">Log Entry Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Timestamp</label>
+                                <p>2023-03-23 15:42:36 UTC</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Log Level</label>
+                                <p><span class="badge bg-danger">Error</span></p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Module</label>
+                                <p>Payment Processing</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Event</label>
+                                <p>Payment Gateway Error</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">IP Address</label>
+                                <p>203.0.113.42 (New York, US)</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">User/System</label>
+                                <p>User ID: 15478 (John Doe)</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Correlation ID</label>
+                                <p>c0rr-8765-4321-9876</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Request ID</label>
+                                <p>req-abcd-efgh-1234</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Message</label>
+                        <p>Failed to process payment: Invalid card details</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Details</label>
+                        <div class="bg-light p-3 rounded">
+                            <pre class="mb-0"><code>{
+  "error": {
+    "code": "PAYMENT_ERROR_4032",
+    "message": "Invalid card details",
+    "details": {
+      "transaction_id": "TRX-7891234",
+      "amount": "1250.00",
+      "currency": "USD",
+      "payment_method": "credit_card",
+      "card_details": {
+        "card_number": "****4567",
+        "expiry": "**/**"
+      },
+      "gateway_response": {
+        "code": "E4032",
+        "message": "Card verification failed: invalid expiry date"
+      }
+    }
+  },
+  "request_path": "/api/v1/payments/process",
+  "method": "POST",
+  "timestamp": "2023-03-23T15:42:36Z"
+}</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Stack Trace</label>
+                        <div class="bg-light p-3 rounded" style="max-height: 200px; overflow-y: auto;">
+                            <pre class="mb-0"><code>com.vanillawallet.payment.ProcessingException: Invalid card details
+  at com.vanillawallet.payment.gateway.CardProcessor.validate(CardProcessor.java:254)
+  at com.vanillawallet.payment.gateway.PaymentGateway.processPayment(PaymentGateway.java:123)
+  at com.vanillawallet.payment.PaymentService.executePayment(PaymentService.java:87)
+  at com.vanillawallet.api.PaymentController.processPayment(PaymentController.java:65)
+  at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+  at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+  at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+  ...</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Related Events</label>
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="badge bg-info text-dark me-2">Info</span>
+                                    Payment processing initiated
+                                </div>
+                                <small class="text-muted">2023-03-23 15:42:30</small>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="badge bg-warning text-dark me-2">Warning</span>
+                                    Card validation error
+                                </div>
+                                <small class="text-muted">2023-03-23 15:42:34</small>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="badge bg-danger me-2">Error</span>
+                                    Payment gateway error
+                                </div>
+                                <small class="text-muted">2023-03-23 15:42:36</small>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="badge bg-info text-dark me-2">Info</span>
+                                    User notified of payment failure
+                                </div>
+                                <small class="text-muted">2023-03-23 15:42:40</small>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Download Log</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Date Range Picker Modal -->
+    <div class="modal fade" id="dateRangeModal" tabindex="-1" aria-labelledby="dateRangeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="dateRangeModalLabel">Select Date Range</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="customStartDate" class="form-label">Start Date</label>
+                        <input type="text" class="form-control" id="customStartDate">
+                    </div>
+                    <div class="mb-3">
+                        <label for="customEndDate" class="form-label">End Date</label>
+                        <input type="text" class="form-control" id="customEndDate">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="applyDateRange">Apply</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.bootstrap5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    
+    <!-- System Logs JS -->
+    <script>
+        $(document).ready(function() {
+            // Initialize DataTable
+            var table = $('#systemLogsTable').DataTable({
+                responsive: true,
+                lengthChange: true,
+                pageLength: 10,
+                lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                dom: '<"row"<"col-sm-6"B><"col-sm-6"f>>rt<"row"<"col-sm-6"l><"col-sm-6"p>>',
+                buttons: [
+                    {
+                        extend: 'collection',
+                        text: '<i class="bi bi-download"></i> Export',
+                        className: 'btn-sm btn-outline-secondary',
+                        buttons: [
+                            {
+                                extend: 'csv',
+                                text: 'Export as CSV',
+                                className: 'dropdown-item',
+                                exportOptions: {
+                                    columns: ':visible'
+                                }
+                            },
+                            {
+                                extend: 'excel',
+                                text: 'Export as Excel',
+                                className: 'dropdown-item',
+                                exportOptions: {
+                                    columns: ':visible'
+                                }
+                            },
+                            {
+                                extend: 'pdf',
+                                text: 'Export as PDF',
+                                className: 'dropdown-item',
+                                exportOptions: {
+                                    columns: ':visible'
+                                }
+                            }
+                        ]
+                    }
+                ]
+            });
+            
+            // Initialize date pickers
+            flatpickr("#startDateFilter", {
+                dateFormat: "Y-m-d H:i",
+                enableTime: true,
+                time_24hr: true,
+                maxDate: "today"
+            });
+            
+            flatpickr("#endDateFilter", {
+                dateFormat: "Y-m-d H:i",
+                enableTime: true,
+                time_24hr: true,
+                maxDate: "today"
+            });
+            
+            flatpickr("#customStartDate", {
+                dateFormat: "Y-m-d H:i",
+                enableTime: true,
+                time_24hr: true,
+                maxDate: "today"
+            });
+            
+            flatpickr("#customEndDate", {
+                dateFormat: "Y-m-d H:i",
+                enableTime: true,
+                time_24hr: true,
+                maxDate: "today"
+            });
+            
+            // Time range dropdown
+            $('.dropdown-item[data-range]').on('click', function(e) {
+                e.preventDefault();
+                const range = $(this).data('range');
+                
+                // Remove active class from all items
+                $('.dropdown-item[data-range]').removeClass('active');
+                // Add active class to the clicked item
+                $(this).addClass('active');
+                
+                if (range === 'custom') {
+                    $('#dateRangeModal').modal('show');
+                } else {
+                    // Update dropdown button text
+                    $('#logsTimeRange').html('<i class="bi bi-calendar me-1"></i> ' + $(this).text());
+                    // Update log data based on selected range
+                    updateLogsData(range);
+                }
+            });
+            
+            // Apply custom date range
+            $('#applyDateRange').on('click', function() {
+                const startDate = $('#customStartDate').val();
+                const endDate = $('#customEndDate').val();
+                
+                if (startDate && endDate) {
+                    // Update dropdown button text
+                    $('#logsTimeRange').html('<i class="bi bi-calendar me-1"></i> ' + startDate + ' - ' + endDate);
+                    // Update log data based on custom date range
+                    updateLogsData('custom', { startDate, endDate });
+                    // Close modal
+                    $('#dateRangeModal').modal('hide');
+                }
+            });
+            
+            // Refresh logs button
+            $('#refreshLogs').on('click', function() {
+                showLoading();
+                setTimeout(function() {
+                    // Refresh logs data
+                    updateLogsData($('.dropdown-item[data-range].active').data('range'));
+                    hideLoading();
+                }, 1000);
+            });
+            
+            // Export logs button
+            $('#exportLogs').on('click', function() {
+                showLoading();
+                setTimeout(function() {
+                    hideLoading();
+                    showToast('System logs exported successfully');
+                }, 1500);
+            });
+            
+            // Log filter form submission
+            $('#logFilterForm').on('submit', function(e) {
+                e.preventDefault();
+                
+                // In a real application, this would make an API call with the filter values
+                // For demo purposes, we'll simulate a loading state
+                showLoading();
+                
+                setTimeout(function() {
+                    // Clear the loading state
+                    hideLoading();
+                    
+                    // Show success toast
+                    showToast('Filters applied successfully');
+                }, 1000);
+            });
+            
+            // Clear filters button
+            $('#clearFilters').on('click', function() {
+                // Reset all form fields
+                $('#logFilterForm')[0].reset();
+                
+                // Show loading state
+                showLoading();
+                
+                setTimeout(function() {
+                    // Clear the loading state
+                    hideLoading();
+                    
+                    // Show success toast
+                    showToast('Filters cleared');
+                    
+                    // Refresh the table
+                    updateLogsData('24hours');
+                }, 1000);
+            });
+        });
+        
+        // Update logs data based on selected date range
+        function updateLogsData(range, customDates) {
+            // Show loading indicator
+            showLoading();
+            
+            // Simulate API call to get logs data
+            setTimeout(function() {
+                // In a real application, this would be an API call to get data for the specified date range
+                console.log(`Updating logs data for range: ${range}`);
+                if (range === 'custom' && customDates) {
+                    console.log(`Custom dates: ${customDates.startDate} to ${customDates.endDate}`);
+                }
+                
+                // Hide loading indicator
+                hideLoading();
+                
+                // Show success toast
+                showToast('System logs updated');
+            }, 1000);
+        }
+        
+        // Show loading spinner
+        function showLoading() {
+            $('#loadingSpinner').removeClass('d-none');
+        }
+        
+        // Hide loading spinner
+        function hideLoading() {
+            $('#loadingSpinner').addClass('d-none');
+        }
+        
+        // Show success toast
+        function showToast(message) {
+            // Create toast element dynamically
+            const toastHtml = `
+                <div class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <i class="bi bi-check-circle me-2"></i> ${message}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+            `;
+            
+            // Create container if it doesn't exist
+            if ($('#toastContainer').length === 0) {
+                $('body').append('<div id="toastContainer" class="position-fixed bottom-0 end-0 p-3" style="z-index: 1050;"></div>');
+            }
+            
+            // Add toast to container
+            $('#toastContainer').append(toastHtml);
+            
+            // Get the last toast added
+            const toastElement = $('#toastContainer .toast').last();
+            
+            // Initialize toast
+            const toast = new bootstrap.Toast(toastElement, {
+                delay: 3000
+            });
+            
+            // Show toast
+            toast.show();
+            
+            // Remove toast after it's hidden
+            toastElement.on('hidden.bs.toast', function() {
+                $(this).remove();
+            });
+        }
+    </script>
+</body>
+</html>
+                <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Logs - Vanilla Digital Wallet Admin</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- DataTables CSS -->
+    <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap5.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.bootstrap5.min.css" rel="stylesheet">
+    <!-- Flatpickr CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../assets/css/admin.css" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="position-fixed top-0 start-0 w-100 h-100 d-none">
+        <div class="w-100 h-100 bg-white opacity-75 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="admin-dashboard.html">
+            <i class="bi bi-wallet2"></i> Vanilla Wallet Admin
+        </a>
+        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+        <div class="navbar-nav">
+            <div class="nav-item text-nowrap d-flex align-items-center">
+                <a class="nav-link px-3 position-relative" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-bell"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger notification-badge">
+                        5
+                    </span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end p-0" aria-labelledby="notificationsDropdown" style="width: 300px;">
+                    <div class="p-2 border-bottom bg-light">
+                        <h6 class="mb-0">Notifications</h6>
+                    </div>
+                    <div class="notification-list" style="max-height: 300px; overflow-y: auto;">
+                        <!-- Notification items would be here -->
+                    </div>
+                    <div class="p-2 border-top bg-light d-flex justify-content-center">
+                        <a href="notifications.html" class="text-decoration-none">View all notifications</a>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <a class="nav-link px-3 dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span>Admin User</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="admin-profile.html"><i class="bi bi-person me-2"></i> Profile</a></li>
+                        <li><a class="dropdown-item" href="admin-settings.html"><i class="bi bi-gear me-2"></i> Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="admin-login.html"><i class="bi bi-box-arrow-right me-2"></i> Sign out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="admin-dashboard.html">
+                                <i class="bi bi-speedometer2 me-2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="users.html">
+                                <i class="bi bi-people me-2"></i>
+                                Users
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="transactions.html">
+                                <i class="bi bi-cash-stack me-2"></i>
+                                Transactions
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="kyc-verification.html">
+                                <i class="bi bi-shield-check me-2"></i>
+                                KYC Verification
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="support-tickets.html">
+                                <i class="bi bi-ticket-detailed me-2"></i>
+                                Support Tickets
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="system-logs.html">
+                                <i class="bi bi-file-text me-2"></i>
+                                System Logs
+                            </a>
+                        </li>
+                    </ul>
+
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>Reports & Analytics</span>
+                    </h6>
+                    <ul class="nav flex-column mb-2">
+                        <li class="nav-item">
+                            <a class="nav-link" href="financial-reports.html">
+                                <i class="bi bi-graph-up me-2"></i>
+                                Financial Reports
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="user-analytics.html">
+                                <i class="bi bi-pie-chart me-2"></i>
+                                User Analytics
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="audit-trail.html">
+                                <i class="bi bi-list-check me-2"></i>
+                                Audit Trail
+                            </a>
+                        </li>
+                    </ul>
+
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>System Management</span>
+                    </h6>
+                    <ul class="nav flex-column mb-2">
+                        <li class="nav-item">
+                            <a class="nav-link" href="account-limits.html">
+                                <i class="bi bi-sliders me-2"></i>
+                                Account Limits
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="fee-management.html">
+                                <i class="bi bi-percent me-2"></i>
+                                Fee Management
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="system-settings.html">
+                                <i class="bi bi-gear me-2"></i>
+                                System Settings
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="admin-users.html">
+                                <i class="bi bi-person-badge me-2"></i>
+                                Admin Users
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">System Logs</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" id="refreshLogs">
+                                <i class="bi bi-arrow-repeat me-1"></i> Refresh
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" id="exportLogs">
+                                <i class="bi bi-download me-1"></i> Export
+                            </button>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="logsTimeRange" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-calendar me-1"></i> Last 24 Hours
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="logsTimeRange">
+                                <li><a class="dropdown-item active" href="#" data-range="24hours">Last 24 Hours</a></li>
+                                <li><a class="dropdown-item" href="#" data-range="7days">Last 7 Days</a></li>
+                                <li><a class="dropdown-item" href="#" data-range="30days">Last 30 Days</a></li>
+                                <li><a class="dropdown-item" href="#" data-range="custom">Custom Range</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Log Stats Cards -->
+                <div class="row row-cols-1 row-cols-md-4 g-4 mb-4">
+                    <div class="col">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                
