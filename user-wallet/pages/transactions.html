@@ -29,18 +29,18 @@
                 <a class="nav-link px-3 position-relative" href="notifications.html">
                     <i class="bi bi-bell"></i>
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger notification-badge" id="notificationCount">
-                        2
+                        0
                     </span>
                 </a>
                 <div class="dropdown">
                     <a class="nav-link px-3 dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span id="userFullName">John Doe</span>
+                        <span id="userFullName">Loading...</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                         <li><a class="dropdown-item" href="profile.html"><i class="bi bi-person"></i> Profile</a></li>
                         <li><a class="dropdown-item" href="settings.html"><i class="bi bi-gear"></i> Settings</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="login.html"><i class="bi bi-box-arrow-right"></i> Sign out</a></li>
+                        <li><a class="dropdown-item" href="../auth/logout.php"><i class="bi bi-box-arrow-right"></i> Sign out</a></li>
                     </ul>
                 </div>
             </div>
@@ -69,6 +69,12 @@
                             <a class="nav-link" href="send-money.html">
                                 <i class="bi bi-send me-2"></i>
                                 Send Money
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="p2p-transfer.html">
+                                <i class="bi bi-people me-2"></i>
+                                P2P Transfer
                             </a>
                         </li>
                         <li class="nav-item">
@@ -102,7 +108,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="login.html">
+                            <a class="nav-link" href="../auth/logout.php">
                                 <i class="bi bi-box-arrow-right me-2"></i>
                                 Sign out
                             </a>
@@ -159,6 +165,34 @@
                     </div>
                 </div>
                 
+                <!-- Quick Actions -->
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title mb-3">Quick Actions</h5>
+                                <div class="d-flex gap-2">
+                                    <a href="send-money.html" class="btn btn-outline-primary">
+                                        <i class="bi bi-send"></i> Send Money
+                                    </a>
+                                    <a href="p2p-transfer.html" class="btn btn-outline-success">
+                                        <i class="bi bi-people"></i> P2P Transfer
+                                    </a>
+                                    <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#quickP2PModal">
+                                        <i class="bi bi-lightning"></i> Quick Transfer
+                                    </button>
+                                    <a href="deposit.html" class="btn btn-outline-secondary">
+                                        <i class="bi bi-plus-circle"></i> Deposit
+                                    </a>
+                                    <a href="withdraw.html" class="btn btn-outline-danger">
+                                        <i class="bi bi-dash-circle"></i> Withdraw
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Filters -->
                 <div class="row mb-3">
                     <div class="col-md-12">
@@ -204,7 +238,7 @@
                         <div class="card text-white bg-primary mb-3">
                             <div class="card-body">
                                 <h5 class="card-title">Total Transactions</h5>
-                                <h2 class="card-text" id="totalTransactions">45</h2>
+                                <h2 class="card-text" id="totalTransactions">--</h2>
                             </div>
                         </div>
                     </div>
@@ -212,7 +246,7 @@
                         <div class="card text-white bg-success mb-3">
                             <div class="card-body">
                                 <h5 class="card-title">Total Deposits</h5>
-                                <h2 class="card-text" id="totalDeposits">$3,450.00</h2>
+                                <h2 class="card-text" id="totalDeposits">--</h2>
                             </div>
                         </div>
                     </div>
@@ -220,7 +254,7 @@
                         <div class="card text-white bg-danger mb-3">
                             <div class="card-body">
                                 <h5 class="card-title">Total Withdrawals</h5>
-                                <h2 class="card-text" id="totalWithdrawals">$2,199.25</h2>
+                                <h2 class="card-text" id="totalWithdrawals">--</h2>
                             </div>
                         </div>
                     </div>
@@ -228,82 +262,59 @@
                         <div class="card text-white bg-info mb-3">
                             <div class="card-body">
                                 <h5 class="card-title">Net Balance</h5>
-                                <h2 class="card-text" id="netBalance">$1,250.75</h2>
+                                <h2 class="card-text" id="netBalance">--</h2>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-<!-- Transaction Table -->
-<div class="table-responsive">
-    <table class="table table-bordered table-hover">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Transaction ID</th>
-                    <th>Type</th>
-                    <th>Description</th>
-                    <th>Amount</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="transactionsTable">
-                <tr>
-                    <td>2023-04-15 14:30:45</td>
-                    <td><small>DEP20230415ABC123</small></td>
-                    <td class="text-success"><i class="bi bi-plus-circle"></i> Deposit</td>
-                    <td>Initial deposit</td>
-                    <td class="text-success">+$500.00</td>
-                    <td><span class="badge bg-success">Completed</span></td>
-                    <td>
-                        <div class="d-flex align-items-center">
-                            <button class="btn btn-sm btn-outline-primary view-transaction" 
-                                data-transaction-id="TXN001">
-                                <i class="bi bi-eye"></i>
-                            </button>
-                        </div>
-                        
-                            </button>
-                        </div>
-                        </div>
-                    </td>
-                </tr>
-                <!-- Other transactions here -->
-            </tbody>
-        </table>
-<!-- Pagination -->
-<nav aria-label="Transaction pagination" class="mt-4">
-    <div class="row">
-        <div class="col-md-6">
-            <p class="mb-0" id="paginationInfo">Showing 1 to 7 of 45 entries</p>
-        </div>
-        <div class="col-md-6">
-            <ul class="pagination justify-content-end" id="pagination">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-                </li>
-                <li class="page-item active" aria-current="page">
-                    <a class="page-link" href="#">1</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">2</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">3</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-                            </div>
+                <!-- Transaction Table -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Transaction ID</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="transactionsTable">
+                                    <tr>
+                                        <td colspan="7" class="text-center">
+                                            <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div> 
+                                            Loading transactions...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
+
+                <!-- Pagination -->
+                <nav aria-label="Transaction pagination" class="mt-4 mb-5">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-0" id="paginationInfo">Showing 0 to 0 of 0 entries</p>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="pagination justify-content-end" id="pagination">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                                </li>
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#">Next</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
             </main>
         </div>
     </div>
@@ -347,28 +358,28 @@
                 <div class="modal-body">
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <p><strong>Transaction ID:</strong> <span id="detailTransactionId">TXN001</span></p>
-                            <p><strong>Reference Code:</strong> <span id="detailReferenceCode">DEP20230415ABC123</span></p>
-                            <p><strong>Type:</strong> <span id="detailType">Deposit</span></p>
-                            <p><strong>Amount:</strong> <span id="detailAmount">$500.00</span></p>
+                            <p><strong>Transaction ID:</strong> <span id="detailTransactionId"></span></p>
+                            <p><strong>Reference Code:</strong> <span id="detailReferenceCode"></span></p>
+                            <p><strong>Type:</strong> <span id="detailType"></span></p>
+                            <p><strong>Amount:</strong> <span id="detailAmount"></span></p>
                         </div>
                         <div class="col-md-6">
-                            <p><strong>Date & Time:</strong> <span id="detailDateTime">2023-04-15 14:30:45</span></p>
-                            <p><strong>Status:</strong> <span id="detailStatus"><span class="badge bg-success">Completed</span></span></p>
-                            <p><strong>Fee:</strong> <span id="detailFee">$0.00</span></p>
-                            <p><strong>Description:</strong> <span id="detailDescription">Initial deposit</span></p>
+                            <p><strong>Date & Time:</strong> <span id="detailDateTime"></span></p>
+                            <p><strong>Status:</strong> <span id="detailStatus"></span></p>
+                            <p><strong>Fee:</strong> <span id="detailFee"></span></p>
+                            <p><strong>Description:</strong> <span id="detailDescription"></span></p>
                         </div>
                     </div>
                     <div id="transferDetails" class="border-top pt-3 mt-3">
                         <h6 class="mb-3">Transfer Details</h6>
                         <div class="row">
                             <div class="col-md-6">
-                                <p><strong>Sender:</strong> <span id="detailSender">Your Wallet</span></p>
-                                <p><strong>Sender Wallet:</strong> <span id="detailSenderWallet">WALL-123456</span></p>
+                                <p><strong>Sender:</strong> <span id="detailSender"></span></p>
+                                <p><strong>Sender Wallet:</strong> <span id="detailSenderWallet"></span></p>
                             </div>
                             <div class="col-md-6">
-                                <p><strong>Receiver:</strong> <span id="detailReceiver">John Doe</span></p>
-                                <p><strong>Receiver Wallet:</strong> <span id="detailReceiverWallet">WALL-789012</span></p>
+                                <p><strong>Receiver:</strong> <span id="detailReceiver"></span></p>
+                                <p><strong>Receiver Wallet:</strong> <span id="detailReceiverWallet"></span></p>
                             </div>
                         </div>
                     </div>
@@ -381,281 +392,175 @@
         </div>
     </div>
 
+    <!-- Quick P2P Transfer Modal -->
+    <div class="modal fade" id="quickP2PModal" tabindex="-1" aria-labelledby="quickP2PModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="quickP2PModalLabel">Quick P2P Transfer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="quickP2PForm">
+                        <div class="mb-3">
+                            <label for="quickP2PRecipient" class="form-label">Recipient Email</label>
+                            <input type="email" class="form-control" id="quickP2PRecipient" required placeholder="Enter recipient's email address">
+                            <div id="recipientNotFound" class="invalid-feedback">Recipient not found.</div>
+                            <div id="recipientInfo" class="form-text text-success mt-2 d-none">
+                                <i class="bi bi-check-circle"></i> <span id="recipientName"></span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="quickP2PAmount" class="form-label">Amount</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="number" class="form-control" id="quickP2PAmount" min="1" step="0.01" required placeholder="Enter amount">
+                            </div>
+                            <div class="form-text">Transfer fee: <strong>$0.00</strong> (Free for P2P transfers)</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="quickP2PDescription" class="form-label">Description (Optional)</label>
+                            <input type="text" class="form-control" id="quickP2PDescription" placeholder="What's this for?">
+                        </div>
+                    </form>
+                    <div class="alert alert-danger d-none" id="p2pTransferError"></div>
+                    <div class="alert alert-success d-none" id="p2pTransferSuccess"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="sendQuickP2P">Send Transfer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JS -->
     <script src="../assets/js/main.js"></script>
-    
-    <script>
-    $(document).ready(function() {
-        // View transaction details
-        $('.view-transaction').click(function() {
-            const transactionId = $(this).data('transaction-id');
-            
-            // Normally we'd fetch transaction details from an API
-            // Here we'll set up a demo based on the transaction ID
-            
-            // For demo purposes, show the modal with pre-populated data
-            const transactions = {
-                'TXN001': {
-                    id: 'TXN001',
-                    reference: 'DEP20230415ABC123',
-                    type: 'Deposit',
-                    amount: '+$500.00',
-                    dateTime: '2023-04-15 14:30:45',
-                    status: 'Completed',
-                    fee: '$0.00',
-                    description: 'Initial deposit',
-                    isTransfer: false
-                },
-                'TXN002': {
-                    id: 'TXN002',
-                    reference: 'WDR20230417DEF456',
-                    type: 'Withdrawal',
-                    amount: '-$100.00',
-                    dateTime: '2023-04-17 09:15:22',
-                    status: 'Completed',
-                    fee: '$2.50',
-                    description: 'ATM withdrawal',
-                    isTransfer: false
-                },
-                'TXN003': {
-                    id: 'TXN003',
-                    reference: 'TRF20230420GHI789',
-                    type: 'Transfer',
-                    amount: '-$250.00',
-                    dateTime: '2023-04-20 11:45:33',
-                    status: 'Completed',
-                    fee: '$0.00',
-                    description: 'Payment to John Doe',
-                    isTransfer: true,
-                    sender: 'Your Wallet',
-                    senderWallet: 'WALL-123456',
-                    receiver: 'John Doe',
-                    receiverWallet: 'WALL-789012'
-                },
-                'TXN004': {
-                    id: 'TXN004',
-                    reference: 'DEP20230422JKL012',
-                    type: 'Deposit',
-                    amount: '+$1,000.00',
-                    dateTime: '2023-04-22 16:20:10',
-                    status: 'Completed',
-                    fee: '$0.00',
-                    description: 'Salary payment',
-                    isTransfer: false
-                },
-                'TXN005': {
-                    id: 'TXN005',
-                    reference: 'WDR20230425MNO345',
-                    type: 'Withdrawal',
-                    amount: '-$150.00',
-                    dateTime: '2023-04-25 13:05:55',
-                    status: 'Completed',
-                    fee: '$3.75',
-                    description: 'Online purchase',
-                    isTransfer: false
-                },
-                'TXN006': {
-                    id: 'TXN006',
-                    reference: 'PAY20230428PQR678',
-                    type: 'Payment',
-                    amount: '-$25.00',
-                    dateTime: '2023-04-28 10:30:15',
-                    status: 'Completed',
-                    fee: '$0.00',
-                    description: 'Coffee Shop',
-                    isTransfer: true,
-                    sender: 'Your Wallet',
-                    senderWallet: 'WALL-123456',
-                    receiver: 'Coffee Shop',
-                    receiverWallet: 'WALL-654321'
-                },
-                'TXN007': {
-                    id: 'TXN007',
-                    reference: 'DEP20230430STU901',
-                    type: 'Deposit',
-                    amount: '+$75.75',
-                    dateTime: '2023-04-30 18:45:05',
-                    status: 'Completed',
-                    fee: '$0.00',
-                    description: 'Refund from Online Store',
-                    isTransfer: false
-                }
-            };
-            
-            // Get transaction details
-            const transaction = transactions[transactionId];
-            
-            if (transaction) {
-                // Populate modal with transaction details
-                $('#detailTransactionId').text(transaction.id);
-                $('#detailReferenceCode').text(transaction.reference);
-                $('#detailType').text(transaction.type);
-                $('#detailAmount').text(transaction.amount);
-                $('#detailDateTime').text(transaction.dateTime);
-                
-                // Set status badge
-                const statusBadge = transaction.status === 'Completed' ? 
-                    '<span class="badge bg-success">Completed</span>' : 
-                    (transaction.status === 'Pending' ? 
-                        '<span class="badge bg-warning">Pending</span>' : 
-                        '<span class="badge bg-danger">Failed</span>');
-                $('#detailStatus').html(statusBadge);
-                
-                $('#detailFee').text(transaction.fee);
-                $('#detailDescription').text(transaction.description);
-                
-                // Show/hide transfer details
-                if (transaction.isTransfer) {
-                    $('#transferDetails').show();
-                    $('#detailSender').text(transaction.sender);
-                    $('#detailSenderWallet').text(transaction.senderWallet);
-                    $('#detailReceiver').text(transaction.receiver);
-                    $('#detailReceiverWallet').text(transaction.receiverWallet);
-                } else {
-                    $('#transferDetails').hide();
-                }
-                
-                // Show the modal
-                $('#transactionDetailsModal').modal('show');
-            }
-        });
-        
-        // Handle date range selection
-        $('.date-range').click(function(e) {
-            e.preventDefault();
-            
-            const range = $(this).data('range');
-            let rangeText = $(this).text();
-            
-            // Update dropdown button text
-            $('#dateRangeDropdown').text(rangeText);
-            
-            // In a real app, we would filter transactions by date here
-            // For demo purposes, we'll just show a loading indicator and then restore the original table
-            
-            $('#transactionsTable').html('<tr><td colspan="7" class="text-center"><div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div> Loading transactions...</td></tr>');
-            
-            setTimeout(function() {
-                // Simulate reloading the original table
-                location.reload();
-            }, 1500);
-        });
-        
-        // Handle custom date range
-        $('#applyCustomDate').click(function() {
-            const startDate = $('#startDate').val();
-            const endDate = $('#endDate').val();
-            
-            if (!startDate || !endDate) {
-                alert('Please select both start and end dates');
-                return;
-            }
-            
-            if (new Date(startDate) > new Date(endDate)) {
-                alert('Start date cannot be after end date');
-                return;
-            }
-            
-            // Update dropdown button text
-            $('#dateRangeDropdown').text(`${startDate} to ${endDate}`);
-            
-            // Close modal
-            $('#customDateModal').modal('hide');
-            
-            // In a real app, we would filter transactions by date here
-            // For demo purposes, we'll just show a loading indicator and then restore the original table
-            
-            $('#transactionsTable').html('<tr><td colspan="7" class="text-center"><div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div> Loading transactions...</td></tr>');
-            
-            setTimeout(function() {
-                // Simulate reloading the original table
-                location.reload();
-            }, 1500);
-        });
-          // Handle filter form submission
-        $('#filterForm').submit(function(e) {
-            e.preventDefault();
-            
-            const filterType = $('#filterType').val();
-            const filterStatus = $('#filterStatus').val();
-            const filterSearch = $('#filterSearch').val();
-            
-            // In a real app, we would filter transactions by these criteria
-            // For demo purposes, we'll just show a loading indicator and then restore the original table
-            
-            $('#transactionsTable').html('<tr><td colspan="7" class="text-center"><div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div> Loading transactions...</td></tr>');
-            
-            setTimeout(function() {
-                // Simulate reloading the original table
-                location.reload();
-            }, 1500);
-        });
-        
-        // Handle refresh button
-        $('#refreshTransactions').click(function() {
-            // Show loading state
-            $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>').prop('disabled', true);
-            
-            // Simulate refreshing the transactions
-            setTimeout(function() {
-                // Reset button and reload page
-                $('#refreshTransactions').html('<i class="bi bi-arrow-repeat"></i> Refresh').prop('disabled', false);
-                location.reload();
-            }, 1500);
-        });
-        
-        // Handle export button
-        $('#exportTransactions').click(function() {
-            // Show loading state
-            $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>').prop('disabled', true);
-            
-            // Simulate export process
-            setTimeout(function() {
-                // Reset button
-                $('#exportTransactions').html('<i class="bi bi-download"></i> Export').prop('disabled', false);
-                
-                // For demo purposes, we'll just show an alert
-                alert('Transactions exported to CSV successfully!');
-            }, 1500);
-        });
-        
-        // Handle download receipt button
-        $('#downloadReceipt').click(function() {
-            // Show loading state
-            $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>').prop('disabled', true);
-            
-            // Simulate download process
-            setTimeout(function() {
-                // Reset button
-                $('#downloadReceipt').html('Download Receipt').prop('disabled', false);
-                
-                // For demo purposes, we'll just show an alert
-                alert('Receipt downloaded successfully!');
-            }, 1500);
-        });
-        
-        // Handle pagination links
-        $('.page-link').click(function(e) {
-            e.preventDefault();
-            
-            // Don't do anything if the link is disabled
-            if ($(this).parent().hasClass('disabled') || $(this).parent().hasClass('active')) {
-                return;
-            }
-            
-            // In a real app, we would load the selected page
-            // For demo purposes, we'll just show a loading indicator and then restore the original table
-            
-            $('#transactionsTable').html('<tr><td colspan="7" class="text-center"><div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div> Loading transactions...</td></tr>');
-            
-            setTimeout(function() {
-                // Simulate reloading the original table
-                location.reload();
-            }, 1500);
-        });
-    });
-    </script>
+    <script src="../assets/js/transactions.js"></script>
 </body>
 </html>
+<div class="modal fade" id="quickP2PModal" tabindex="-1" aria-labelledby="quickP2PModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="quickP2PModalLabel">Quick P2P Transfer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="quickP2PForm" novalidate>
+                    <div class="mb-3">
+                        <label for="quickP2PRecipient" class="form-label">Recipient Email</label>
+                        <div class="input-group has-validation">
+                            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                            <input type="email" class="form-control" id="quickP2PRecipient" required 
+                                placeholder="Enter recipient's email address" autocomplete="off">
+                            <div class="invalid-feedback" id="recipientNotFound">Recipient not found.</div>
+                        </div>
+                        <div id="recipientInfo" class="form-text text-success mt-2 d-none">
+                            <i class="bi bi-check-circle"></i> Sending to: <span id="recipientName" class="fw-bold"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="quickP2PAmount" class="form-label">Amount</label>
+                        <div class="input-group has-validation">
+                            <span class="input-group-text">$</span>
+                            <input type="number" class="form-control" id="quickP2PAmount" min="1" step="0.01" required 
+                                placeholder="Enter amount">
+                            <div class="invalid-feedback">Please enter a valid amount.</div>
+                        </div>
+                        <div class="form-text d-flex justify-content-between">
+                            <span>Transfer fee: <strong class="text-success">$0.00</strong> (Free for P2P transfers)</span>
+                            <span>Your balance: <strong id="userBalance">Loading...</strong></span>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="quickP2PDescription" class="form-label">Description (Optional)</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-chat"></i></span>
+                            <input type="text" class="form-control" id="quickP2PDescription" 
+                                placeholder="What's this for?" maxlength="255">
+                        </div>
+                    </div>
+                </form>
+                
+                <!-- Processing animation -->
+                <div id="p2pTransferProcessing" class="text-center my-4 d-none">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Processing...</span>
+                    </div>
+                    <p class="mt-2">Processing your transfer...</p>
+                </div>
+                
+                <!-- Error message -->
+                <div class="alert alert-danger d-none" id="p2pTransferError"></div>
+                
+                <!-- Success message -->
+                <div class="alert alert-success d-none" id="p2pTransferSuccess"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="sendQuickP2P">
+                    <i class="bi bi-send"></i> Send Transfer
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Transaction Receipt Modal -->
+<div class="modal fade" id="receiptModal" tabindex="-1" aria-labelledby="receiptModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="receiptModalLabel">Transfer Receipt</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-3">
+                    <i class="bi bi-check-circle-fill text-success" style="font-size: 3rem;"></i>
+                    <h5 class="mt-2">Transfer Complete!</h5>
+                </div>
+                
+                <div class="card mb-3">
+                    <div class="card-body p-3">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Date:</span>
+                            <span id="receiptDate"></span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Reference:</span>
+                            <span id="receiptReference"></span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Recipient:</span>
+                            <span id="receiptRecipient"></span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Amount:</span>
+                            <span id="receiptAmount" class="text-success fw-bold"></span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted">Fee:</span>
+                            <span id="receiptFee">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-between">
+                    <span class="text-muted">Transaction ID:</span>
+                    <span id="receiptTransactionId" class="small"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary btn-sm" id="downloadReceipt">
+                    <i class="bi bi-download"></i> Download
+                </button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
