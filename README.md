@@ -1,5 +1,5 @@
 # Mwallet
- The Vanilla Digital Wallet Platform is a comprehensive financial solution built with pure HTML, CSS, JavaScript, PHP, and MySQL, without relying on JSON or middleware. This platform provides a robust digital wallet experience with essential financial transaction capabilities, user management, and administrative tools
+ The Vanilla Digital Wallet Platform is a comprehensive financial solution built with pure HTML, CSS, JavaScript, PHP, and MySQL, without relying on JSON or middleware. This platform provides a  digital wallet experience with essential financial transaction capabilities, user management, and administrative tools
 
 The platform follows a three-tier architecture:
 
@@ -302,5 +302,65 @@ key :
 ||--|| represents a one-to-one relationship
 ||--o{ represents a one-to-many relationship
 
+API Documentation: Get Unread Notification Count
+Overview
+This API endpoint retrieves the count of unread notifications for the authenticated user.
+Endpoint
+CopyPOST /path/to/endpoint.php
+Authentication
+Authentication is required via JWT token in the Authorization header.
+Required Headers:
 
+Authorization: Bearer {token}
+
+Request
+Method
+POST
+Headers
+
+Content-Type: application/json
+Authorization: Bearer {your_jwt_token}
+
+Body
+No request body required.
+Response
+Success Response
+Code: 200 OK
+jsonCopy{
+    "success": true,
+    "count": 5
+}
+Where:
+
+success: Boolean indicating the request was successful
+count: Integer representing the number of unread notifications
+
+Error Response
+Code: 401 Unauthorized
+jsonCopy{
+    "success": false,
+    "message": "Unauthorized access. Please login again."
+}
+CORS Support
+This API supports Cross-Origin Resource Sharing (CORS) with the following configurations:
+
+Allowed Origins: All (*)
+Allowed Methods: POST
+Max Age: 3600 seconds
+Allowed Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With
+
+Example
+Request
+  https://api-domain.com/path/to/endpoint.php \
+  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' \
+  -H 'Content-Type: application/json'
+Response
+jsonCopy{
+    "success": true,
+    "count": 3
+}
+Notes
+
+The JWT token must contain a valid user_id field that will be used to fetch notifications.
+The endpoint does not return the actual notification items, only the count.
 
