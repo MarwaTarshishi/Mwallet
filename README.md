@@ -1,6 +1,12 @@
 # Mwallet
  The Vanilla Digital Wallet Platform is a comprehensive financial solution built with pure HTML, CSS, JavaScript, PHP, and MySQL, without relying on JSON or middleware. This platform provides a  digital wallet experience with essential financial transaction capabilities, user management, and administrative tools
 
+ # Hosting Details 
+Service: Amazon EC2
+Server IP: 15.237.174.115
+Live Demo: Click Here
+ GitHub Repo :Mwallet
+
 The platform follows a three-tier architecture:
 
 1. **User Frontend (user-wallet)**: Interface for end-users to manage their wallets, perform transactions, and manage their profiles.
